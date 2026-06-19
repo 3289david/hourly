@@ -1,0 +1,46 @@
+services:
+  hourly:
+    build: .
+    container_name: hourly
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - POLAR_ACCESS_TOKEN=${POLAR_ACCESS_TOKEN}
+      - POLAR_ORGANIZATION_ID=${POLAR_ORGANIZATION_ID}
+      - POLAR_PRODUCT_1H=${POLAR_PRODUCT_1H}
+      - POLAR_PRODUCT_6H=${POLAR_PRODUCT_6H}
+      - POLAR_PRODUCT_24H=${POLAR_PRODUCT_24H}
+      - POLAR_PRODUCT_7D=${POLAR_PRODUCT_7D}
+      - POLAR_PRODUCT_30D=${POLAR_PRODUCT_30D}
+      - JWT_SECRET=${JWT_SECRET}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL}
+      - WORKSPACE_ROOT=/data/workspaces
+    volumes:
+      - workspace_data:/data/workspaces
+    networks:
+      - hourly_net
+
+  nginx:
+    image: nginx:alpine
+    container_name: hourly_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    depends_on:
+      - hourly
+    networks:
+      - hourly_net
+
+volumes:
+  workspace_data:
+
+networks:
+  hourly_net:
+    driver: bridge
