@@ -115,22 +115,36 @@ export default function WorkspacePage() {
         <div className="flex-1 min-w-0 flex flex-col min-h-0">
           {/* Tab bar */}
           <div
-            className="flex items-center gap-0 flex-shrink-0"
             style={{
-              background: "var(--color-surface-3)",
+              display: "flex",
+              alignItems: "center",
+              flexShrink: 0,
+              background: "rgba(6,6,10,0.8)",
               borderBottom: "1px solid var(--color-border)",
+              height: "38px",
             }}
           >
             {/* Sidebar toggle */}
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="px-3 py-2 transition-colors"
-              style={{ color: "var(--color-text-3)", borderRight: "1px solid var(--color-border)" }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "38px",
+                height: "38px",
+                flexShrink: 0,
+                color: sidebarOpen ? "var(--color-accent)" : "var(--color-text-3)",
+                background: "transparent",
+                border: "none",
+                borderRight: "1px solid var(--color-border)",
+                cursor: "pointer",
+              }}
               onMouseEnter={(e) =>
                 (e.currentTarget.style.color = "var(--color-text)")
               }
               onMouseLeave={(e) =>
-                (e.currentTarget.style.color = "var(--color-text-3)")
+                (e.currentTarget.style.color = sidebarOpen ? "var(--color-accent)" : "var(--color-text-3)")
               }
               title={sidebarOpen ? "Hide files" : "Show files"}
             >
@@ -144,25 +158,23 @@ export default function WorkspacePage() {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className="px-5 py-2 text-xs font-medium capitalize transition-colors relative"
                 style={{
-                  color:
-                    activeTab === tab
-                      ? "var(--color-text)"
-                      : "var(--color-text-3)",
-                  borderBottom:
-                    activeTab === tab
-                      ? "2px solid var(--color-accent)"
-                      : "2px solid transparent",
+                  padding: "0 1.25rem",
+                  height: "38px",
+                  fontSize: "0.75rem",
+                  fontWeight: activeTab === tab ? 600 : 400,
+                  color: activeTab === tab ? "var(--color-text)" : "var(--color-text-3)",
                   background: "transparent",
+                  border: "none",
+                  borderBottom: activeTab === tab ? "2px solid var(--color-accent)" : "2px solid transparent",
+                  cursor: "pointer",
+                  letterSpacing: "0.01em",
                 }}
                 onMouseEnter={(e) => {
-                  if (activeTab !== tab)
-                    e.currentTarget.style.color = "var(--color-text-2)";
+                  if (activeTab !== tab) e.currentTarget.style.color = "var(--color-text-2)";
                 }}
                 onMouseLeave={(e) => {
-                  if (activeTab !== tab)
-                    e.currentTarget.style.color = "var(--color-text-3)";
+                  if (activeTab !== tab) e.currentTarget.style.color = "var(--color-text-3)";
                 }}
               >
                 {tab === "chat"
