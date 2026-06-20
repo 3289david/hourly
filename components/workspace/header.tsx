@@ -190,7 +190,7 @@ export function WorkspaceHeader({
       {/* Right — extend + menu */}
       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", position: "relative" }}>
         <a
-          href="/activate"
+          href="/pricing"
           style={{
             fontSize: "0.75rem",
             fontWeight: 600,
@@ -204,7 +204,7 @@ export function WorkspaceHeader({
           onMouseEnter={(e) => { if (!isLow) { e.currentTarget.style.borderColor = "var(--color-accent)"; e.currentTarget.style.color = "var(--color-accent)"; } }}
           onMouseLeave={(e) => { if (!isLow) { e.currentTarget.style.borderColor = "var(--color-border)"; e.currentTarget.style.color = "var(--color-text-2)"; } }}
         >
-          {isLow ? "Extend Now" : "Add Time"}
+          {isLow ? "Buy More Time" : "Buy Time"}
         </a>
 
         <button
