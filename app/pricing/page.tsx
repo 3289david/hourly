@@ -1,12 +1,7 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import { IconCheck, IconArrowRight } from "@/components/icons";
-import { IconHourly } from "@/components/icons";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Pricing — Hourly",
-  description: "Buy time, use time. No subscriptions, no auto-renewals.",
-};
+import Link from "next/link";
+import { IconCheck, IconArrowRight, IconHourly } from "@/components/icons";
 
 const PLANS = [
   {
@@ -63,10 +58,7 @@ export default function PricingPage() {
           <span style={{ color: "var(--color-text)", fontFamily: "var(--font-mono)", fontSize: "0.9rem", fontWeight: 600 }}>Hourly</span>
         </Link>
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          <Link href="/activate" style={{ color: "var(--color-text-2)", fontSize: "0.875rem", textDecoration: "none" }}
-            onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "var(--color-text)")}
-            onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--color-text-2)")}
-          >
+          <Link href="/activate" className="pricing-nav-link" style={{ color: "var(--color-text-2)", fontSize: "0.875rem", textDecoration: "none" }}>
             Activate Key
           </Link>
           <Link href="/workspace" style={{
@@ -80,19 +72,15 @@ export default function PricingPage() {
       </header>
 
       {/* Glow */}
-      <div
-        aria-hidden
-        style={{
-          position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)",
-          width: "800px", height: "300px", pointerEvents: "none",
-          background: "radial-gradient(ellipse at 50% 0%, rgba(0,212,255,0.1) 0%, transparent 70%)",
-        }}
-      />
+      <div aria-hidden style={{
+        position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)",
+        width: "800px", height: "300px", pointerEvents: "none",
+        background: "radial-gradient(ellipse at 50% 0%, rgba(0,212,255,0.1) 0%, transparent 70%)",
+      }} />
 
       <main style={{ paddingTop: "60px" }}>
         <div style={{ maxWidth: "72rem", margin: "0 auto", padding: "5rem 1.5rem 6rem", textAlign: "center" }}>
 
-          {/* Header */}
           <p style={{ color: "var(--color-accent)", fontFamily: "var(--font-mono)", fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: "1rem" }}>
             Pricing
           </p>
@@ -104,26 +92,18 @@ export default function PricingPage() {
             One-time purchase. Buy time, use time.<br />No auto-renewals, no hidden limits.
           </p>
 
-          {/* Plans grid */}
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))",
-            gap: "1rem",
-            marginBottom: "3rem",
-          }}>
+          {/* Plans */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "1rem", marginBottom: "3rem" }}>
             {PLANS.map((plan) => (
               <div
                 key={plan.id}
                 style={{
-                  position: "relative",
-                  display: "flex", flexDirection: "column", alignItems: "center",
-                  borderRadius: "1rem", padding: "1.75rem 1.5rem", textAlign: "center",
+                  position: "relative", display: "flex", flexDirection: "column", alignItems: "flex-start",
+                  borderRadius: "1rem", padding: "1.75rem 1.5rem", textAlign: "left",
                   background: plan.highlight
                     ? "linear-gradient(160deg, rgba(0,212,255,0.08) 0%, rgba(0,60,255,0.03) 100%)"
                     : "var(--color-surface)",
-                  border: plan.highlight
-                    ? "1px solid rgba(0,212,255,0.35)"
-                    : "1px solid var(--color-border)",
+                  border: plan.highlight ? "1px solid rgba(0,212,255,0.35)" : "1px solid var(--color-border)",
                   boxShadow: plan.highlight ? "0 0 48px rgba(0,212,255,0.06)" : "none",
                 }}
               >
@@ -155,7 +135,7 @@ export default function PricingPage() {
                   {plan.description}
                 </p>
 
-                <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.5rem", marginBottom: "1.75rem", flex: 1, width: "100%", textAlign: "left" }}>
+                <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.5rem", marginBottom: "1.75rem", flex: 1, width: "100%" }}>
                   {plan.features.map((f) => (
                     <li key={f} style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "var(--color-text-2)", fontSize: "0.8rem" }}>
                       <IconCheck size={12} style={{ color: "var(--color-accent)", flexShrink: 0 } as React.CSSProperties} />
@@ -168,12 +148,13 @@ export default function PricingPage() {
                   href={plan.url}
                   target="_blank"
                   rel="noopener noreferrer"
+                  className={plan.highlight ? "plan-btn-accent" : "plan-btn-default"}
                   style={{
                     display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem",
                     width: "100%", padding: "0.75rem 1.25rem", borderRadius: "0.625rem",
                     fontSize: "0.9rem", fontWeight: 600, textDecoration: "none",
                     ...(plan.highlight
-                      ? { background: "var(--color-accent)", color: "#000", boxShadow: "0 0 24px rgba(0,212,255,0.3)" }
+                      ? { background: "var(--color-accent)", color: "#000", boxShadow: "0 0 24px rgba(0,212,255,0.25)" }
                       : { background: "var(--color-surface-3)", color: "var(--color-text)", border: "1px solid var(--color-border-2)" }),
                   }}
                 >
@@ -183,8 +164,7 @@ export default function PricingPage() {
             ))}
           </div>
 
-          {/* Footer note */}
-          <p style={{ color: "var(--color-text-3)", fontSize: "0.875rem", marginBottom: "1rem" }}>
+          <p style={{ color: "var(--color-text-3)", fontSize: "0.875rem", marginBottom: "0.75rem" }}>
             Payments processed by <span style={{ color: "var(--color-text-2)" }}>Polar.sh</span> — license key delivered instantly by email.
           </p>
           <p style={{ color: "var(--color-text-3)", fontSize: "0.875rem" }}>
@@ -195,6 +175,12 @@ export default function PricingPage() {
           </p>
         </div>
       </main>
+
+      <style>{`
+        .plan-btn-accent:hover { background: var(--color-accent-hover) !important; }
+        .plan-btn-default:hover { border-color: var(--color-border-2) !important; background: var(--color-surface-2) !important; }
+        .pricing-nav-link:hover { color: var(--color-text) !important; }
+      `}</style>
     </div>
   );
 }
