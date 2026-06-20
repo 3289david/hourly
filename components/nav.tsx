@@ -26,7 +26,7 @@ export function Nav() {
 
         {[
           { label: "Features", href: "/#features" },
-          { label: "Pricing", href: "/#pricing" },
+          { label: "Pricing", href: "/pricing" },
           { label: "FAQ", href: "/#faq" },
         ].map((link) => (
           <a
@@ -50,7 +50,7 @@ export function Nav() {
         </Link>
 
         <Link
-          href="/#pricing"
+          href="/pricing"
           style={{ background: "var(--color-accent)", color: "#000", fontSize: "0.875rem", fontWeight: 600, padding: "0.5rem 1rem", borderRadius: "0.5rem", textDecoration: "none" }}
           onMouseEnter={(e) => (e.currentTarget.style.background = "var(--color-accent-hover)")}
           onMouseLeave={(e) => (e.currentTarget.style.background = "var(--color-accent)")}
@@ -97,7 +97,7 @@ export function Nav() {
         >
           {[
             { label: "Features", href: "/#features" },
-            { label: "Pricing", href: "/#pricing" },
+            { label: "Pricing", href: "/pricing" },
             { label: "FAQ", href: "/#faq" },
             { label: "Activate Key", href: "/activate" },
           ].map((link) => (
@@ -106,7 +106,7 @@ export function Nav() {
             </a>
           ))}
           <Link
-            href="/#pricing"
+            href="/pricing"
             style={{ background: "var(--color-accent)", color: "#000", fontSize: "1rem", fontWeight: 600, padding: "0.625rem 1.5rem", borderRadius: "0.5rem", textDecoration: "none" }}
             onClick={() => setMobileOpen(false)}
           >

@@ -253,6 +253,29 @@ export function WorkspaceHeader({
               boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
             }}
           >
+            <a
+              href="/pricing"
+              style={{
+                display: "block",
+                width: "100%",
+                textAlign: "left",
+                padding: "0.5rem 0.75rem",
+                borderRadius: "0.5rem",
+                fontSize: "0.875rem",
+                color: "var(--color-text-2)",
+                textDecoration: "none",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "var(--color-surface)";
+                e.currentTarget.style.color = "var(--color-text)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "transparent";
+                e.currentTarget.style.color = "var(--color-text-2)";
+              }}
+            >
+              Pricing
+            </a>
             <button
               onClick={handleLogout}
               style={{
