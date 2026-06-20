@@ -39,7 +39,7 @@ export function CTABanner() {
               className="text-4xl md:text-5xl font-bold mb-4"
               style={{ color: "var(--color-text)" }}
             >
-              $0.99 for an hour
+              $1.99 for an hour
               <br />
               of unlimited AI.
             </h2>

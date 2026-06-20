@@ -113,7 +113,7 @@ export function Hero() {
                   e.currentTarget.style.transform = "translateY(0)";
                 }}
               >
-                Start for $0.99
+                Start for $1.99
                 <IconArrowRight size={16} />
               </a>
               <a

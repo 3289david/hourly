@@ -156,11 +156,11 @@ In your Polar dashboard, create five one-time payment products:
 
 | Product | Price | License key enabled |
 |---|---|---|
-| Starter — 1 Hour | $0.99 | Yes |
-| Builder — 6 Hours | $2.99 | Yes |
-| Day Pass — 24 Hours | $7.99 | Yes |
-| Power Week — 7 Days | $19.99 | Yes |
-| Monthly — 30 Days | $39.99 | Yes |
+| Starter — 1 Hour | $1.99 | Yes |
+| Builder — 6 Hours | $3.99 | Yes |
+| Day Pass — 24 Hours | $9.99 | Yes |
+| Power Week — 7 Days | $22.99 | Yes |
+| Monthly — 30 Days | $44.99 | Yes |
 
 Make sure **License Keys** are enabled on each product. Polar will email the key to the buyer automatically.
 
