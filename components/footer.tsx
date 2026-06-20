@@ -6,12 +6,14 @@ import { IconHourly, IconGitHub } from "./icons";
 export function Footer() {
   return (
     <footer
-      className="py-12"
-      style={{ borderTop: "1px solid var(--color-border)" }}
+      style={{ borderTop: "1px solid var(--color-border)", paddingTop: "3rem", paddingBottom: "3rem" }}
     >
-      <div className="max-w-5xl mx-auto px-6 flex flex-col items-center text-center gap-10">
-        <div className="flex flex-col items-center gap-2">
-          <Link href="/" className="flex items-center gap-2">
+      <div
+        className="max-w-5xl mx-auto px-6"
+        style={{ textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "2.5rem" }}
+      >
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem" }}>
+          <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <IconHourly size={22} />
             <span
               className="text-base font-semibold"
@@ -20,15 +22,15 @@ export function Footer() {
               Hourly
             </span>
           </Link>
-          <p className="text-sm" style={{ color: "var(--color-text-3)" }}>
+          <p className="text-sm text-center" style={{ color: "var(--color-text-3)" }}>
             Hire AI by the hour.
           </p>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-14">
-          <div className="flex flex-col items-center gap-3">
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "3.5rem" }}>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.75rem" }}>
             <div
-              className="text-sm font-semibold uppercase tracking-wider mb-1"
+              className="text-sm font-semibold uppercase tracking-wider text-center"
               style={{ color: "var(--color-text-3)" }}
             >
               Product
@@ -42,7 +44,7 @@ export function Footer() {
               <Link
                 key={link.label}
                 href={link.href}
-                className="text-sm transition-colors"
+                className="text-sm text-center transition-colors"
                 style={{ color: "var(--color-text-2)" }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-text)")}
                 onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-text-2)")}
@@ -52,9 +54,9 @@ export function Footer() {
             ))}
           </div>
 
-          <div className="flex flex-col items-center gap-3">
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.75rem" }}>
             <div
-              className="text-sm font-semibold uppercase tracking-wider mb-1"
+              className="text-sm font-semibold uppercase tracking-wider text-center"
               style={{ color: "var(--color-text-3)" }}
             >
               Legal
@@ -66,7 +68,7 @@ export function Footer() {
               <Link
                 key={link.label}
                 href={link.href}
-                className="text-sm transition-colors"
+                className="text-sm text-center transition-colors"
                 style={{ color: "var(--color-text-2)" }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-text)")}
                 onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-text-2)")}
@@ -78,17 +80,23 @@ export function Footer() {
         </div>
 
         <div
-          className="w-full pt-6 flex flex-col items-center gap-4"
-          style={{ borderTop: "1px solid var(--color-border)" }}
+          className="w-full"
+          style={{
+            borderTop: "1px solid var(--color-border)",
+            paddingTop: "1.5rem",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "1rem",
+          }}
         >
-          <p className="text-sm" style={{ color: "var(--color-text-3)" }}>
+          <p className="text-sm text-center" style={{ color: "var(--color-text-3)" }}>
             &copy; {new Date().getFullYear()} Hourly. All rights reserved.
           </p>
           <a
             href="https://github.com/3289david/hourly"
             target="_blank"
             rel="noopener noreferrer"
-            className="transition-colors"
             style={{ color: "var(--color-text-3)" }}
             onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-text)")}
             onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-text-3)")}

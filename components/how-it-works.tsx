@@ -28,24 +28,23 @@ export function HowItWorks() {
   return (
     <section
       id="how-it-works"
-      className="py-28"
-      style={{ borderTop: "1px solid var(--color-border)" }}
+      style={{ borderTop: "1px solid var(--color-border)", paddingTop: "7rem", paddingBottom: "7rem" }}
     >
-      <div className="max-w-5xl mx-auto px-6">
-        <div className="text-center mb-14">
+      <div className="max-w-5xl mx-auto px-6" style={{ textAlign: "center" }}>
+        <div style={{ marginBottom: "3.5rem" }}>
           <div
-            className="text-sm font-mono uppercase tracking-widest mb-4"
-            style={{ color: "var(--color-accent)" }}
+            className="text-sm font-mono uppercase tracking-widest"
+            style={{ color: "var(--color-accent)", marginBottom: "1rem" }}
           >
             How it works
           </div>
           <h2
-            className="text-4xl md:text-5xl font-bold"
+            className="text-4xl md:text-5xl font-bold text-center"
             style={{ color: "var(--color-text)" }}
           >
             Three steps to start.
           </h2>
-          <p className="mt-4 text-base" style={{ color: "var(--color-text-2)" }}>
+          <p className="mt-4 text-base text-center" style={{ color: "var(--color-text-2)" }}>
             From zero to a running AI coding session in under two minutes.
           </p>
         </div>
@@ -82,13 +81,13 @@ export function HowItWorks() {
               </div>
 
               <h3
-                className="text-lg font-semibold mb-3"
+                className="text-lg font-semibold mb-3 text-center"
                 style={{ color: "var(--color-text)" }}
               >
                 {step.title}
               </h3>
               <p
-                className="text-base leading-relaxed"
+                className="text-base leading-relaxed text-center"
                 style={{ color: "var(--color-text-2)" }}
               >
                 {step.description}

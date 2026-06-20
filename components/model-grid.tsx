@@ -1,40 +1,39 @@
 "use client";
 
 const MODELS = [
-  { name: "DeepSeek R1", sub: "May 2025", specialty: "Reasoning", badge: "Updated", badgeColor: "#00d4ff", color: "#0066ff" },
-  { name: "Qwen3 Coder", sub: "2025", specialty: "Coding", badge: "New", badgeColor: "#00e87a", color: "#ff6600" },
-  { name: "Gemini 2.5 Flash", sub: "Google", specialty: "Reasoning", badge: "1M ctx", badgeColor: "#4285f4", color: "#4285f4" },
-  { name: "DeepSeek V4 Flash", sub: "Ultra-cheap", specialty: "Fast", badge: "Cheapest", badgeColor: "#ffb020", color: "#ffb020" },
-  { name: "Llama 4 Scout", sub: "Meta", specialty: "General", badge: "10M ctx", badgeColor: "#7c3aed", color: "#7c3aed" },
-  { name: "Kimi K2", sub: "Moonshot", specialty: "Debug", badge: "New", badgeColor: "#00e87a", color: "#00c853" },
-  { name: "Mistral Codestral", sub: "2508", specialty: "Coding", badge: "256k ctx", badgeColor: "#ff6600", color: "#ff6600" },
-  { name: "Gemini Flash Lite", sub: "Google", specialty: "Fast", badge: "Free tier", badgeColor: "#4285f4", color: "#4285f4" },
-  { name: "Qwen3 Coder", sub: "Free tier", specialty: "Coding", badge: "Free", badgeColor: "#00e87a", color: "#00e87a" },
-  { name: "Auto Route", sub: "Smart select", specialty: "Auto", badge: "Recommended", badgeColor: "#00d4ff", color: "#00d4ff" },
+  { name: "DeepSeek R1", sub: "May 2025", badge: "Updated", badgeColor: "#00d4ff", color: "#0066ff" },
+  { name: "Qwen3 Coder", sub: "2025", badge: "New", badgeColor: "#00e87a", color: "#ff6600" },
+  { name: "Gemini 2.5 Flash", sub: "Google", badge: "1M ctx", badgeColor: "#4285f4", color: "#4285f4" },
+  { name: "DeepSeek V4 Flash", sub: "Ultra-cheap", badge: "Cheapest", badgeColor: "#ffb020", color: "#ffb020" },
+  { name: "Llama 4 Scout", sub: "Meta", badge: "10M ctx", badgeColor: "#7c3aed", color: "#7c3aed" },
+  { name: "Kimi K2", sub: "Moonshot", badge: "New", badgeColor: "#00e87a", color: "#00c853" },
+  { name: "Mistral Codestral", sub: "2508", badge: "256k ctx", badgeColor: "#ff6600", color: "#ff6600" },
+  { name: "Gemini Flash Lite", sub: "Google", badge: "Free tier", badgeColor: "#4285f4", color: "#4285f4" },
+  { name: "Qwen3 Coder Free", sub: "Free tier", badge: "Free", badgeColor: "#00e87a", color: "#00e87a" },
+  { name: "Auto Route", sub: "Smart select", badge: "Recommended", badgeColor: "#00d4ff", color: "#00d4ff" },
 ];
 
 export function ModelGrid() {
   return (
     <section
-      className="py-28"
-      style={{ borderTop: "1px solid var(--color-border)" }}
+      style={{ borderTop: "1px solid var(--color-border)", paddingTop: "7rem", paddingBottom: "7rem" }}
     >
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="text-center mb-14">
+      <div className="max-w-6xl mx-auto px-6" style={{ textAlign: "center" }}>
+        <div style={{ marginBottom: "3.5rem" }}>
           <div
-            className="text-sm font-mono uppercase tracking-widest mb-4"
-            style={{ color: "var(--color-accent)" }}
+            className="text-sm font-mono uppercase tracking-widest"
+            style={{ color: "var(--color-accent)", marginBottom: "1rem" }}
           >
             Models
           </div>
           <h2
-            className="text-4xl md:text-5xl font-bold"
+            className="text-4xl md:text-5xl font-bold text-center"
             style={{ color: "var(--color-text)" }}
           >
             10 models.{" "}
             <span style={{ color: "var(--color-text-2)" }}>All switching instantly.</span>
           </h2>
-          <p className="mt-3 text-base" style={{ color: "var(--color-text-3)" }}>
+          <p className="mt-3 text-base text-center" style={{ color: "var(--color-text-3)" }}>
             Routed via OpenRouter. Switch mid-session at any time.
           </p>
         </div>
@@ -50,17 +49,17 @@ export function ModelGrid() {
               }}
             >
               <div
-                className="w-8 h-8 rounded-full mb-3 flex-shrink-0"
+                className="w-8 h-8 rounded-full mb-3"
                 style={{ background: model.color + "22", border: `1.5px solid ${model.color}55` }}
               />
               <div
-                className="font-medium text-sm mb-1 leading-tight"
+                className="font-medium text-sm mb-1 leading-tight text-center"
                 style={{ color: "var(--color-text)" }}
               >
                 {model.name}
               </div>
               <div
-                className="mb-2.5"
+                className="mb-2.5 text-center"
                 style={{ color: "var(--color-text-3)", fontFamily: "var(--font-mono)", fontSize: "11px" }}
               >
                 {model.sub}
@@ -80,7 +79,7 @@ export function ModelGrid() {
           ))}
         </div>
 
-        <p className="text-center text-sm mt-6" style={{ color: "var(--color-text-3)" }}>
+        <p className="text-sm mt-6 text-center" style={{ color: "var(--color-text-3)" }}>
           BYOK users can connect their own OpenRouter key to access even more models.
         </p>
       </div>

@@ -52,19 +52,18 @@ export function Features() {
   return (
     <section
       id="features"
-      className="py-28"
-      style={{ borderTop: "1px solid var(--color-border)" }}
+      style={{ borderTop: "1px solid var(--color-border)", paddingTop: "7rem", paddingBottom: "7rem" }}
     >
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="text-center mb-14">
+      <div className="max-w-6xl mx-auto px-6" style={{ textAlign: "center" }}>
+        <div style={{ marginBottom: "3.5rem" }}>
           <div
-            className="text-sm font-mono uppercase tracking-widest mb-4"
-            style={{ color: "var(--color-accent)" }}
+            className="text-sm font-mono uppercase tracking-widest"
+            style={{ color: "var(--color-accent)", marginBottom: "1rem" }}
           >
             Features
           </div>
           <h2
-            className="text-4xl md:text-5xl font-bold"
+            className="text-4xl md:text-5xl font-bold text-center"
             style={{ color: "var(--color-text)" }}
           >
             Everything you need.{" "}
@@ -93,12 +92,12 @@ export function Features() {
               </div>
 
               <h3
-                className="font-semibold text-lg mb-3"
+                className="font-semibold text-lg mb-3 text-center"
                 style={{ color: "var(--color-text)" }}
               >
                 {feature.title}
               </h3>
-              <p className="text-base leading-relaxed" style={{ color: "var(--color-text-2)" }}>
+              <p className="text-base leading-relaxed text-center" style={{ color: "var(--color-text-2)" }}>
                 {feature.description}
               </p>
             </div>

@@ -40,19 +40,18 @@ export function FAQ() {
   return (
     <section
       id="faq"
-      className="py-28"
-      style={{ borderTop: "1px solid var(--color-border)" }}
+      style={{ borderTop: "1px solid var(--color-border)", paddingTop: "7rem", paddingBottom: "7rem" }}
     >
-      <div className="max-w-2xl mx-auto px-6">
-        <div className="text-center mb-12">
+      <div className="max-w-2xl mx-auto px-6" style={{ textAlign: "center" }}>
+        <div style={{ marginBottom: "3rem" }}>
           <div
-            className="text-sm font-mono uppercase tracking-widest mb-4"
-            style={{ color: "var(--color-accent)" }}
+            className="text-sm font-mono uppercase tracking-widest"
+            style={{ color: "var(--color-accent)", marginBottom: "1rem" }}
           >
             FAQ
           </div>
           <h2
-            className="text-4xl md:text-5xl font-bold"
+            className="text-4xl md:text-5xl font-bold text-center"
             style={{ color: "var(--color-text)" }}
           >
             Common questions.
@@ -70,12 +69,13 @@ export function FAQ() {
               }}
             >
               <button
-                className="w-full flex items-center px-6 py-4 gap-4"
+                className="w-full flex items-center gap-4"
+                style={{ padding: "1rem 1.5rem", textAlign: "center" }}
                 onClick={() => setOpen(open === i ? null : i)}
                 aria-expanded={open === i}
               >
                 <span
-                  className="flex-1 text-center text-base font-medium"
+                  className="flex-1 text-base font-medium text-center"
                   style={{ color: "var(--color-text)" }}
                 >
                   {faq.q}
@@ -93,8 +93,8 @@ export function FAQ() {
 
               {open === i && (
                 <div
-                  className="px-6 pb-5 text-base leading-relaxed text-center"
-                  style={{ color: "var(--color-text-2)" }}
+                  className="text-base leading-relaxed text-center"
+                  style={{ color: "var(--color-text-2)", padding: "0 1.5rem 1.25rem" }}
                 >
                   {faq.a}
                 </div>

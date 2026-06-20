@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <>
       <Nav />
-      <main className="pt-16">
+      <main style={{ paddingTop: "80px" }}>
         <Hero />
         <HowItWorks />
         <Features />
