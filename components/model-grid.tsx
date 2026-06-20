@@ -16,63 +16,62 @@ const MODELS = [
 export function ModelGrid() {
   return (
     <section
-      className="py-24"
+      className="py-28"
       style={{ borderTop: "1px solid var(--color-border)" }}
     >
       <div className="max-w-6xl mx-auto px-6">
-        <div className="text-center mb-10">
+        <div className="text-center mb-14">
           <div
-            className="text-xs font-mono uppercase tracking-widest mb-3"
+            className="text-sm font-mono uppercase tracking-widest mb-4"
             style={{ color: "var(--color-accent)" }}
           >
             Models
           </div>
           <h2
-            className="text-3xl md:text-4xl font-bold"
+            className="text-4xl md:text-5xl font-bold"
             style={{ color: "var(--color-text)" }}
           >
             10 models.{" "}
             <span style={{ color: "var(--color-text-2)" }}>All switching instantly.</span>
           </h2>
-          <p className="mt-2 text-xs" style={{ color: "var(--color-text-3)" }}>
+          <p className="mt-3 text-base" style={{ color: "var(--color-text-3)" }}>
             Routed via OpenRouter. Switch mid-session at any time.
           </p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
           {MODELS.map((model) => (
             <div
               key={model.name + model.sub}
-              className="flex flex-col items-center text-center p-3 rounded-lg"
+              className="flex flex-col items-center text-center p-4 rounded-xl"
               style={{
                 background: "var(--color-surface)",
                 border: "1px solid var(--color-border)",
               }}
             >
-              {/* Color dot instead of heavy SVG */}
               <div
-                className="w-6 h-6 rounded-full mb-2 flex-shrink-0"
+                className="w-8 h-8 rounded-full mb-3 flex-shrink-0"
                 style={{ background: model.color + "22", border: `1.5px solid ${model.color}55` }}
               />
               <div
-                className="font-medium text-xs mb-0.5 leading-tight"
+                className="font-medium text-sm mb-1 leading-tight"
                 style={{ color: "var(--color-text)" }}
               >
                 {model.name}
               </div>
               <div
-                className="text-xs mb-2"
-                style={{ color: "var(--color-text-3)", fontFamily: "var(--font-mono)", fontSize: "10px" }}
+                className="mb-2.5"
+                style={{ color: "var(--color-text-3)", fontFamily: "var(--font-mono)", fontSize: "11px" }}
               >
                 {model.sub}
               </div>
               <div
-                className="text-xs px-1.5 py-0.5 rounded-full w-full text-center"
+                className="px-2 py-0.5 rounded-full w-full text-center"
                 style={{
                   background: model.badgeColor + "18",
                   color: model.badgeColor,
                   fontFamily: "var(--font-mono)",
-                  fontSize: "9px",
+                  fontSize: "11px",
                 }}
               >
                 {model.badge}
@@ -81,7 +80,7 @@ export function ModelGrid() {
           ))}
         </div>
 
-        <p className="text-center text-xs mt-5" style={{ color: "var(--color-text-3)" }}>
+        <p className="text-center text-sm mt-6" style={{ color: "var(--color-text-3)" }}>
           BYOK users can connect their own OpenRouter key to access even more models.
         </p>
       </div>

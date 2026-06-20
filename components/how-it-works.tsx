@@ -28,24 +28,24 @@ export function HowItWorks() {
   return (
     <section
       id="how-it-works"
-      className="py-24"
+      className="py-28"
       style={{ borderTop: "1px solid var(--color-border)" }}
     >
-      <div className="max-w-4xl mx-auto px-6">
-        <div className="text-center mb-12">
+      <div className="max-w-5xl mx-auto px-6">
+        <div className="text-center mb-14">
           <div
-            className="text-xs font-mono uppercase tracking-widest mb-3"
+            className="text-sm font-mono uppercase tracking-widest mb-4"
             style={{ color: "var(--color-accent)" }}
           >
             How it works
           </div>
           <h2
-            className="text-3xl md:text-4xl font-bold"
+            className="text-4xl md:text-5xl font-bold"
             style={{ color: "var(--color-text)" }}
           >
             Three steps to start.
           </h2>
-          <p className="mt-3 text-sm" style={{ color: "var(--color-text-2)" }}>
+          <p className="mt-4 text-base" style={{ color: "var(--color-text-2)" }}>
             From zero to a running AI coding session in under two minutes.
           </p>
         </div>
@@ -54,27 +54,27 @@ export function HowItWorks() {
           {STEPS.map((step) => (
             <div
               key={step.step}
-              className="flex flex-col items-center text-center p-6 rounded-xl"
+              className="flex flex-col items-center text-center p-8 rounded-xl"
               style={{
                 background: "var(--color-surface)",
                 border: "1px solid var(--color-border)",
               }}
             >
               <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 relative"
+                className="w-14 h-14 rounded-xl flex items-center justify-center mb-5 relative"
                 style={{
                   background: "var(--color-surface-3)",
                   border: "1px solid var(--color-border-2)",
                 }}
               >
-                <step.icon size={18} style={{ color: "var(--color-accent)" } as React.CSSProperties} />
+                <step.icon size={22} style={{ color: "var(--color-accent)" } as React.CSSProperties} />
                 <div
-                  className="absolute -top-2 -right-2 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold"
+                  className="absolute -top-2.5 -right-2.5 w-6 h-6 rounded-full flex items-center justify-center font-bold"
                   style={{
                     background: "var(--color-accent)",
                     color: "#000",
                     fontFamily: "var(--font-mono)",
-                    fontSize: "10px",
+                    fontSize: "11px",
                   }}
                 >
                   {step.step.slice(1)}
@@ -82,13 +82,13 @@ export function HowItWorks() {
               </div>
 
               <h3
-                className="text-sm font-semibold mb-2"
+                className="text-lg font-semibold mb-3"
                 style={{ color: "var(--color-text)" }}
               >
                 {step.title}
               </h3>
               <p
-                className="text-xs leading-relaxed"
+                className="text-base leading-relaxed"
                 style={{ color: "var(--color-text-2)" }}
               >
                 {step.description}

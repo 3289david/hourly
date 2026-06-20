@@ -41,22 +41,17 @@ export function Hero() {
 
   return (
     <section className="relative flex flex-col items-center pt-16 overflow-hidden">
-      {/* Subtle grid */}
       <div className="absolute inset-0 grid-bg opacity-20" aria-hidden />
-
-      {/* Top glow */}
       <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[640px] h-[320px] pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse at 50% 0%, rgba(0,212,255,0.08) 0%, transparent 70%)",
-        }}
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] pointer-events-none"
+        style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(0,212,255,0.10) 0%, transparent 70%)" }}
         aria-hidden
       />
 
-      <div className="relative w-full max-w-3xl mx-auto px-6 pt-24 pb-16 flex flex-col items-center text-center">
+      <div className="relative w-full max-w-4xl mx-auto px-6 pt-28 pb-16 flex flex-col items-center text-center">
         {/* Badge */}
         <div
-          className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-8"
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-10"
           style={{
             background: "var(--color-accent-dim)",
             border: "1px solid rgba(0,212,255,0.2)",
@@ -64,13 +59,13 @@ export function Hero() {
             fontFamily: "var(--font-mono)",
           }}
         >
-          <IconClock size={11} />
+          <IconClock size={13} />
           Pay only for the time you use
         </div>
 
         {/* Headline */}
         <h1
-          className="text-4xl md:text-6xl font-bold tracking-tight mb-5 leading-[1.08]"
+          className="text-5xl md:text-7xl font-bold tracking-tight mb-6 leading-[1.06]"
           style={{ color: "var(--color-text)" }}
         >
           Hire AI
@@ -89,7 +84,7 @@ export function Hero() {
 
         {/* Subtext */}
         <p
-          className="text-base md:text-lg mb-8 max-w-xl"
+          className="text-lg md:text-xl mb-10 max-w-2xl"
           style={{ color: "var(--color-text-2)", lineHeight: "1.7" }}
         >
           Unlimited AI coding agent — no subscription. Buy an hour, use it hard.
@@ -97,10 +92,10 @@ export function Hero() {
         </p>
 
         {/* CTAs */}
-        <div className="flex flex-col sm:flex-row items-center gap-3 mb-12">
+        <div className="flex flex-col sm:flex-row items-center gap-4 mb-14">
           <a
             href="#pricing"
-            className="flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm transition-all"
+            className="flex items-center gap-2 px-7 py-3.5 rounded-lg font-semibold text-base transition-all"
             style={{ background: "var(--color-accent)", color: "#000" }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = "var(--color-accent-hover)";
@@ -112,15 +107,12 @@ export function Hero() {
             }}
           >
             Start for $1.99
-            <IconArrowRight size={14} />
+            <IconArrowRight size={16} />
           </a>
           <a
             href="#how-it-works"
-            className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm transition-colors"
-            style={{
-              color: "var(--color-text-2)",
-              border: "1px solid var(--color-border-2)",
-            }}
+            className="flex items-center gap-2 px-7 py-3.5 rounded-lg text-base transition-colors"
+            style={{ color: "var(--color-text-2)", border: "1px solid var(--color-border-2)" }}
             onMouseEnter={(e) => {
               e.currentTarget.style.color = "var(--color-text)";
               e.currentTarget.style.borderColor = "var(--color-text-3)";
@@ -136,22 +128,22 @@ export function Hero() {
 
         {/* Stats */}
         <div
-          className="flex items-center gap-10 pt-8 w-full justify-center"
+          className="flex items-center gap-12 pt-8 w-full justify-center"
           style={{ borderTop: "1px solid var(--color-border)" }}
         >
           {[
-            { value: "4 models", label: "available" },
+            { value: "10 models", label: "available" },
             { value: "1 hour", label: "minimum" },
             { value: "0", label: "tokens / credits" },
           ].map((stat) => (
             <div key={stat.label} className="text-center">
               <div
-                className="text-lg font-bold"
+                className="text-xl font-bold"
                 style={{ color: "var(--color-text)", fontFamily: "var(--font-mono)" }}
               >
                 {stat.value}
               </div>
-              <div className="text-xs mt-0.5" style={{ color: "var(--color-text-3)" }}>
+              <div className="text-sm mt-1" style={{ color: "var(--color-text-3)" }}>
                 {stat.label}
               </div>
             </div>
@@ -159,42 +151,40 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Terminal demo — centered below headline */}
-      <div className="relative w-full max-w-2xl mx-auto px-6 pb-20">
+      {/* Terminal demo */}
+      <div className="relative w-full max-w-2xl mx-auto px-6 pb-24">
         <div
           style={{
             border: "1px solid var(--color-border-2)",
-            borderRadius: "10px",
+            borderRadius: "12px",
             overflow: "hidden",
           }}
         >
-          {/* Title bar */}
           <div
-            className="flex items-center gap-2 px-4 py-2.5"
+            className="flex items-center gap-2 px-4 py-3"
             style={{
               background: "var(--color-surface-3)",
               borderBottom: "1px solid var(--color-border)",
             }}
           >
-            <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#ff5f57" }} />
-            <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#ffbd2e" }} />
-            <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#28c840" }} />
+            <span className="w-3 h-3 rounded-full" style={{ background: "#ff5f57" }} />
+            <span className="w-3 h-3 rounded-full" style={{ background: "#ffbd2e" }} />
+            <span className="w-3 h-3 rounded-full" style={{ background: "#28c840" }} />
             <span
-              className="ml-auto text-xs"
+              className="ml-auto text-sm"
               style={{ color: "var(--color-text-3)", fontFamily: "var(--font-mono)" }}
             >
               hourly — bash
             </span>
           </div>
 
-          {/* Content */}
           <div
-            className="p-5 min-h-[200px]"
+            className="p-6 min-h-[220px]"
             style={{
               background: "var(--color-surface)",
               fontFamily: "var(--font-mono)",
-              fontSize: "12px",
-              lineHeight: "1.9",
+              fontSize: "14px",
+              lineHeight: "2",
             }}
           >
             {DEMO_LINES.slice(0, visibleLines).map((line, i) => (
@@ -212,8 +202,8 @@ export function Hero() {
               <span
                 style={{
                   display: "inline-block",
-                  width: "7px",
-                  height: "14px",
+                  width: "8px",
+                  height: "16px",
                   background: "var(--color-accent)",
                   animation: "blink 1s step-end infinite",
                   verticalAlign: "middle",

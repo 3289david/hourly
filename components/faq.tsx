@@ -40,48 +40,48 @@ export function FAQ() {
   return (
     <section
       id="faq"
-      className="py-24"
+      className="py-28"
       style={{ borderTop: "1px solid var(--color-border)" }}
     >
       <div className="max-w-2xl mx-auto px-6">
-        <div className="text-center mb-10">
+        <div className="text-center mb-12">
           <div
-            className="text-xs font-mono uppercase tracking-widest mb-3"
+            className="text-sm font-mono uppercase tracking-widest mb-4"
             style={{ color: "var(--color-accent)" }}
           >
             FAQ
           </div>
           <h2
-            className="text-3xl md:text-4xl font-bold"
+            className="text-4xl md:text-5xl font-bold"
             style={{ color: "var(--color-text)" }}
           >
             Common questions.
           </h2>
         </div>
 
-        <div className="flex flex-col gap-1.5">
+        <div className="flex flex-col gap-2">
           {FAQS.map((faq, i) => (
             <div
               key={i}
-              className="rounded-lg overflow-hidden"
+              className="rounded-xl overflow-hidden"
               style={{
                 background: "var(--color-surface)",
                 border: "1px solid var(--color-border)",
               }}
             >
               <button
-                className="w-full flex items-center px-4 py-3 gap-4"
+                className="w-full flex items-center px-6 py-4 gap-4"
                 onClick={() => setOpen(open === i ? null : i)}
                 aria-expanded={open === i}
               >
                 <span
-                  className="flex-1 text-center text-sm font-medium"
+                  className="flex-1 text-center text-base font-medium"
                   style={{ color: "var(--color-text)" }}
                 >
                   {faq.q}
                 </span>
                 <IconChevronDown
-                  size={14}
+                  size={16}
                   style={{
                     color: "var(--color-text-3)",
                     flexShrink: 0,
@@ -93,7 +93,7 @@ export function FAQ() {
 
               {open === i && (
                 <div
-                  className="px-4 pb-3 text-sm leading-relaxed text-center"
+                  className="px-6 pb-5 text-base leading-relaxed text-center"
                   style={{ color: "var(--color-text-2)" }}
                 >
                   {faq.a}

@@ -67,34 +67,34 @@ export function Pricing() {
   return (
     <section
       id="pricing"
-      className="py-24"
+      className="py-28"
       style={{ borderTop: "1px solid var(--color-border)" }}
     >
       <div className="max-w-6xl mx-auto px-6">
-        <div className="text-center mb-12">
+        <div className="text-center mb-14">
           <div
-            className="text-xs font-mono uppercase tracking-widest mb-3"
+            className="text-sm font-mono uppercase tracking-widest mb-4"
             style={{ color: "var(--color-accent)" }}
           >
             Pricing
           </div>
           <h2
-            className="text-3xl md:text-4xl font-bold"
+            className="text-4xl md:text-5xl font-bold"
             style={{ color: "var(--color-text)" }}
           >
             No subscriptions.{" "}
             <span style={{ color: "var(--color-text-2)" }}>Pay for what you use.</span>
           </h2>
-          <p className="mt-3 text-sm max-w-sm mx-auto" style={{ color: "var(--color-text-2)" }}>
+          <p className="mt-4 text-base max-w-md mx-auto" style={{ color: "var(--color-text-2)" }}>
             One-time purchase. Buy time, use time. No auto-renewals, no hidden limits.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
           {PLANS.map((plan) => (
             <div
               key={plan.id}
-              className="flex flex-col items-center text-center rounded-xl p-5 relative"
+              className="flex flex-col items-center text-center rounded-xl p-6 relative"
               style={{
                 background: plan.highlight
                   ? "linear-gradient(160deg, rgba(0,212,255,0.07) 0%, rgba(0,100,255,0.03) 100%)"
@@ -106,12 +106,12 @@ export function Pricing() {
             >
               {plan.popular && (
                 <div
-                  className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-2.5 py-0.5 rounded-full whitespace-nowrap"
+                  className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full whitespace-nowrap"
                   style={{
                     background: "var(--color-accent)",
                     color: "#000",
                     fontFamily: "var(--font-mono)",
-                    fontSize: "9px",
+                    fontSize: "10px",
                     fontWeight: 600,
                   }}
                 >
@@ -120,33 +120,33 @@ export function Pricing() {
               )}
 
               <div
-                className="text-xs font-mono uppercase tracking-wider mb-1"
+                className="text-sm font-mono uppercase tracking-wider mb-1"
                 style={{ color: "var(--color-text-3)" }}
               >
                 {plan.duration}
               </div>
-              <div className="text-sm font-semibold mb-3" style={{ color: "var(--color-text)" }}>
+              <div className="text-base font-semibold mb-3" style={{ color: "var(--color-text)" }}>
                 {plan.name}
               </div>
 
-              <div className="mb-3">
+              <div className="mb-4">
                 <span
-                  className="text-2xl font-bold"
+                  className="text-3xl font-bold"
                   style={{ color: "var(--color-text)", fontFamily: "var(--font-mono)" }}
                 >
                   {plan.price}
                 </span>
-                <span className="text-xs ml-1" style={{ color: "var(--color-text-3)" }}>one-time</span>
+                <span className="text-sm ml-1.5" style={{ color: "var(--color-text-3)" }}>one-time</span>
               </div>
 
-              <p className="text-xs mb-4" style={{ color: "var(--color-text-2)" }}>
+              <p className="text-sm mb-5" style={{ color: "var(--color-text-2)" }}>
                 {plan.description}
               </p>
 
-              <ul className="flex flex-col items-center gap-1.5 mb-4 flex-1 w-full">
+              <ul className="flex flex-col items-center gap-2 mb-5 flex-1 w-full">
                 {plan.features.map((f) => (
-                  <li key={f} className="flex items-center justify-center gap-1.5 text-xs" style={{ color: "var(--color-text-2)" }}>
-                    <IconCheck size={10} style={{ color: "var(--color-accent)", flexShrink: 0 } as React.CSSProperties} />
+                  <li key={f} className="flex items-center justify-center gap-2 text-sm" style={{ color: "var(--color-text-2)" }}>
+                    <IconCheck size={12} style={{ color: "var(--color-accent)", flexShrink: 0 } as React.CSSProperties} />
                     {f}
                   </li>
                 ))}
@@ -156,7 +156,7 @@ export function Pricing() {
                 href={CHECKOUT_URLS[plan.id] ?? "#pricing"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-1.5 py-2 px-4 rounded-lg text-xs font-medium transition-all w-full"
+                className="flex items-center justify-center gap-2 py-2.5 px-5 rounded-lg text-sm font-medium transition-all w-full"
                 style={
                   plan.highlight
                     ? { background: "var(--color-accent)", color: "#000" }
@@ -172,13 +172,13 @@ export function Pricing() {
                 }}
               >
                 Buy {plan.duration}
-                <IconArrowRight size={11} />
+                <IconArrowRight size={13} />
               </a>
             </div>
           ))}
         </div>
 
-        <p className="mt-8 text-center text-xs" style={{ color: "var(--color-text-3)" }}>
+        <p className="mt-10 text-center text-sm" style={{ color: "var(--color-text-3)" }}>
           Payments processed by <span style={{ color: "var(--color-text-2)" }}>Polar.sh</span> — license key delivered instantly by email.
         </p>
       </div>

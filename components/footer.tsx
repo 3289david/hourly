@@ -6,29 +6,29 @@ import { IconHourly, IconGitHub } from "./icons";
 export function Footer() {
   return (
     <footer
-      className="py-10"
+      className="py-12"
       style={{ borderTop: "1px solid var(--color-border)" }}
     >
-      <div className="max-w-5xl mx-auto px-6 flex flex-col items-center text-center gap-8">
+      <div className="max-w-5xl mx-auto px-6 flex flex-col items-center text-center gap-10">
         <div className="flex flex-col items-center gap-2">
           <Link href="/" className="flex items-center gap-2">
-            <IconHourly size={20} />
+            <IconHourly size={22} />
             <span
-              className="text-sm font-semibold"
+              className="text-base font-semibold"
               style={{ color: "var(--color-text)", fontFamily: "var(--font-mono)" }}
             >
               Hourly
             </span>
           </Link>
-          <p className="text-xs" style={{ color: "var(--color-text-3)" }}>
+          <p className="text-sm" style={{ color: "var(--color-text-3)" }}>
             Hire AI by the hour.
           </p>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-10">
-          <div className="flex flex-col items-center gap-2">
+        <div className="flex flex-wrap justify-center gap-14">
+          <div className="flex flex-col items-center gap-3">
             <div
-              className="text-xs font-semibold uppercase tracking-wider mb-1"
+              className="text-sm font-semibold uppercase tracking-wider mb-1"
               style={{ color: "var(--color-text-3)" }}
             >
               Product
@@ -42,7 +42,7 @@ export function Footer() {
               <Link
                 key={link.label}
                 href={link.href}
-                className="text-xs transition-colors"
+                className="text-sm transition-colors"
                 style={{ color: "var(--color-text-2)" }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-text)")}
                 onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-text-2)")}
@@ -52,9 +52,9 @@ export function Footer() {
             ))}
           </div>
 
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col items-center gap-3">
             <div
-              className="text-xs font-semibold uppercase tracking-wider mb-1"
+              className="text-sm font-semibold uppercase tracking-wider mb-1"
               style={{ color: "var(--color-text-3)" }}
             >
               Legal
@@ -66,7 +66,7 @@ export function Footer() {
               <Link
                 key={link.label}
                 href={link.href}
-                className="text-xs transition-colors"
+                className="text-sm transition-colors"
                 style={{ color: "var(--color-text-2)" }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-text)")}
                 onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-text-2)")}
@@ -78,10 +78,10 @@ export function Footer() {
         </div>
 
         <div
-          className="w-full pt-6 flex flex-col items-center gap-3"
+          className="w-full pt-6 flex flex-col items-center gap-4"
           style={{ borderTop: "1px solid var(--color-border)" }}
         >
-          <p className="text-xs" style={{ color: "var(--color-text-3)" }}>
+          <p className="text-sm" style={{ color: "var(--color-text-3)" }}>
             &copy; {new Date().getFullYear()} Hourly. All rights reserved.
           </p>
           <a
@@ -94,7 +94,7 @@ export function Footer() {
             onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-text-3)")}
             aria-label="GitHub"
           >
-            <IconGitHub size={16} />
+            <IconGitHub size={18} />
           </a>
         </div>
       </div>
