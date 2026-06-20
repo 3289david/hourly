@@ -1,36 +1,63 @@
 @import "tailwindcss";
 
-@theme {
-  --color-bg: #050505;
-  --color-surface: #0f0f0f;
-  --color-surface-2: #141414;
-  --color-surface-3: #1a1a1a;
-  --color-border: #1f1f1f;
-  --color-border-2: #2a2a2a;
-  --color-accent: #00d4ff;
-  --color-accent-dim: #00d4ff20;
+/* ─── Design tokens ─────────────────────────────────────────────────────────── */
+:root {
+  --color-bg:        #06060a;
+  --color-surface:   #0f0f17;
+  --color-surface-2: #16161f;
+  --color-surface-3: #1d1d28;
+
+  --color-border:   #24243a;
+  --color-border-2: #30304a;
+
+  --color-accent:       #00d4ff;
+  --color-accent-dim:   rgba(0, 212, 255, 0.08);
   --color-accent-hover: #33ddff;
-  --color-text: #f0f0f0;
-  --color-text-2: #888888;
-  --color-text-3: #444444;
-  --color-success: #00ff88;
-  --color-error: #ff4444;
-  --color-warning: #ffaa00;
+
+  --color-text:   #f0f0f4;
+  --color-text-2: #7878a0;
+  --color-text-3: #44445a;
+
+  --color-success: #00e87a;
+  --color-error:   #ff4455;
+  --color-warning: #ffb020;
+}
+
+@theme {
+  --color-bg:        #06060a;
+  --color-surface:   #0f0f17;
+  --color-surface-2: #16161f;
+  --color-surface-3: #1d1d28;
+  --color-border:    #24243a;
+  --color-border-2:  #30304a;
+  --color-accent:       #00d4ff;
+  --color-accent-dim:   rgba(0, 212, 255, 0.08);
+  --color-accent-hover: #33ddff;
+  --color-text:   #f0f0f4;
+  --color-text-2: #7878a0;
+  --color-text-3: #44445a;
+  --color-success: #00e87a;
+  --color-error:   #ff4455;
+  --color-warning: #ffb020;
 
   --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, "Cascadia Code", monospace;
 }
 
-* {
+/* ─── Reset ──────────────────────────────────────────────────────────────────── */
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+/* ─── Base ───────────────────────────────────────────────────────────────────── */
 html {
+  font-size: 15px;
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color-scheme: dark;
 }
 
 body {
@@ -38,96 +65,79 @@ body {
   color: var(--color-text);
   font-family: var(--font-sans);
   line-height: 1.6;
+  min-height: 100vh;
 }
 
+/* ─── Selection ──────────────────────────────────────────────────────────────── */
 ::selection {
-  background: var(--color-accent);
-  color: #000;
+  background: rgba(0, 212, 255, 0.2);
+  color: #fff;
 }
 
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--color-surface);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-border-2);
+/* ─── Focus ──────────────────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
   border-radius: 3px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-text-3);
+/* ─── Scrollbar ──────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-2);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-text-3); }
+
+/* ─── Utilities ──────────────────────────────────────────────────────────────── */
+.grid-bg {
+  background-image:
+    linear-gradient(var(--color-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+  background-size: 48px 48px;
 }
 
-/* Gradient glow effects */
 .glow-accent {
-  box-shadow: 0 0 20px var(--color-accent-dim), 0 0 40px var(--color-accent-dim);
+  box-shadow:
+    0 0 0 1px rgba(0, 212, 255, 0.12),
+    0 0 24px rgba(0, 212, 255, 0.06);
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, #ffffff 0%, var(--color-accent) 100%);
+  background: linear-gradient(120deg, #fff 30%, #a0eeff 60%, #00d4ff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Grid pattern background */
-.grid-bg {
-  background-image:
-    linear-gradient(var(--color-border) 1px, transparent 1px),
-    linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
-  background-size: 40px 40px;
-}
-
-/* Scan line animation */
-@keyframes scan {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(100vh); }
-}
-
+/* ─── Animations ─────────────────────────────────────────────────────────────── */
 @keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
+  0%, 49%  { opacity: 1; }
+  50%, 100% { opacity: 0; }
 }
 
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 10px var(--color-accent-dim);
-  }
-  50% {
-    box-shadow: 0 0 30px var(--color-accent-dim), 0 0 60px var(--color-accent-dim);
-  }
+  0%, 100% { box-shadow: 0 0 0 1px rgba(0, 212, 255, 0.10), 0 0 16px rgba(0, 212, 255, 0.04); }
+  50%       { box-shadow: 0 0 0 1px rgba(0, 212, 255, 0.25), 0 0 40px rgba(0, 212, 255, 0.10); }
 }
 
-.animate-fade-in-up {
-  animation: fadeInUp 0.6s ease forwards;
+@keyframes scan {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
 }
 
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
+.animate-fade-in-up  { animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.animate-pulse-glow  { animation: pulse-glow 2.5s ease-in-out infinite; }
 
-/* Terminal styles */
-.xterm-viewport::-webkit-scrollbar {
-  width: 4px;
-}
+/* ─── Third-party ────────────────────────────────────────────────────────────── */
+.xterm-viewport::-webkit-scrollbar { width: 4px; }
 
-/* Monaco editor overrides */
 .monaco-editor,
 .monaco-editor-background,
 .monaco-editor .inputarea.ime-input {

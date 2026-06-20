@@ -64,11 +64,10 @@ export function Features() {
             Features
           </div>
           <h2
-            className="text-4xl md:text-5xl font-bold"
+            className="text-3xl md:text-4xl font-bold"
             style={{ color: "var(--color-text)" }}
           >
-            Everything you need.
-            <br />
+            Everything you need.{" "}
             <span style={{ color: "var(--color-text-2)" }}>Nothing you don&apos;t.</span>
           </h2>
         </div>

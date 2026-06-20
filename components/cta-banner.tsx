@@ -36,16 +36,14 @@ export function CTABanner() {
             </div>
 
             <h2
-              className="text-4xl md:text-5xl font-bold mb-4"
+              className="text-3xl md:text-4xl font-bold mb-4"
               style={{ color: "var(--color-text)" }}
             >
-              $1.99 for an hour
-              <br />
-              of unlimited AI.
+              $1.99 for an hour of unlimited AI.
             </h2>
 
             <p
-              className="text-lg mb-10 max-w-lg mx-auto"
+              className="text-base mb-8 max-w-lg mx-auto"
               style={{ color: "var(--color-text-2)" }}
             >
               No account needed. No subscription. Just a license key and a countdown.

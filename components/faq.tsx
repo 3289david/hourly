@@ -56,7 +56,7 @@ export function FAQ() {
             FAQ
           </div>
           <h2
-            className="text-4xl md:text-5xl font-bold"
+            className="text-3xl md:text-4xl font-bold"
             style={{ color: "var(--color-text)" }}
           >
             Common questions.

@@ -36,12 +36,12 @@ export function HowItWorks() {
             How it works
           </div>
           <h2
-            className="text-4xl md:text-5xl font-bold"
+            className="text-3xl md:text-4xl font-bold"
             style={{ color: "var(--color-text)" }}
           >
             Three steps to start.
           </h2>
-          <p className="mt-4 text-lg" style={{ color: "var(--color-text-2)" }}>
+          <p className="mt-3 text-base" style={{ color: "var(--color-text-2)" }}>
             From zero to a running AI coding session in under two minutes.
           </p>
         </div>

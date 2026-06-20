@@ -115,11 +115,10 @@ export function Pricing() {
             Pricing
           </div>
           <h2
-            className="text-4xl md:text-5xl font-bold"
+            className="text-3xl md:text-4xl font-bold"
             style={{ color: "var(--color-text)" }}
           >
-            No subscriptions.
-            <br />
+            No subscriptions.{" "}
             <span style={{ color: "var(--color-text-2)" }}>Pay for what you use.</span>
           </h2>
           <p
@@ -234,8 +233,16 @@ export function Pricing() {
   );
 }
 
+const CHECKOUT_URLS: Record<string, string> = {
+  "1h": process.env.NEXT_PUBLIC_CHECKOUT_1H ?? "#pricing",
+  "6h": process.env.NEXT_PUBLIC_CHECKOUT_6H ?? "#pricing",
+  "24h": process.env.NEXT_PUBLIC_CHECKOUT_24H ?? "#pricing",
+  "7d": process.env.NEXT_PUBLIC_CHECKOUT_7D ?? "#pricing",
+  "30d": process.env.NEXT_PUBLIC_CHECKOUT_30D ?? "#pricing",
+};
+
 function PlanButton({ plan }: { plan: (typeof PLANS)[0] }) {
-  const href = process.env[`NEXT_PUBLIC_CHECKOUT_${plan.id.toUpperCase().replace("H", "H").replace("D", "D")}`] ?? "#pricing";
+  const href = CHECKOUT_URLS[plan.id] ?? "#pricing";
 
   return (
     <a

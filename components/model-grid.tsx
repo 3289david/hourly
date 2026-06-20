@@ -209,11 +209,10 @@ export function ModelGrid() {
             Models
           </div>
           <h2
-            className="text-3xl md:text-4xl font-bold"
+            className="text-2xl md:text-3xl font-bold"
             style={{ color: "var(--color-text)" }}
           >
-            10 models. All switching instantly.
-            <br />
+            10 models. All switching instantly.{" "}
             <span style={{ color: "var(--color-text-2)" }}>Or let Auto pick for you.</span>
           </h2>
           <p
