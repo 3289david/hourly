@@ -3,56 +3,11 @@
 import { IconCheck, IconArrowRight } from "./icons";
 
 const PLANS = [
-  {
-    id: "1h",
-    name: "Starter",
-    duration: "1 hour",
-    price: "$1.99",
-    description: "Perfect for a quick fix or a single feature.",
-    features: ["1 hr unlimited access", "All 10 AI models", "Cloud workspace", "Terminal access"],
-    popular: false,
-    highlight: false,
-  },
-  {
-    id: "6h",
-    name: "Builder",
-    duration: "6 hours",
-    price: "$3.99",
-    description: "A solid work session. Ship a full feature.",
-    features: ["6 hr unlimited access", "All 10 AI models", "Cloud workspace", "Terminal access", "GitHub integration"],
-    popular: false,
-    highlight: false,
-  },
-  {
-    id: "24h",
-    name: "Day Pass",
-    duration: "24 hours",
-    price: "$9.99",
-    description: "A full day to build, debug, and ship.",
-    features: ["24 hr unlimited access", "All 10 AI models", "Cloud workspace", "Terminal access", "GitHub integration", "BYOK support"],
-    popular: true,
-    highlight: true,
-  },
-  {
-    id: "7d",
-    name: "Week",
-    duration: "7 days",
-    price: "$22.99",
-    description: "Launch a whole project. Build something real.",
-    features: ["7 day unlimited access", "All 10 AI models", "Cloud workspace", "Terminal access", "GitHub integration", "BYOK support", "Priority routing"],
-    popular: false,
-    highlight: false,
-  },
-  {
-    id: "30d",
-    name: "Monthly",
-    duration: "30 days",
-    price: "$44.99",
-    description: "For those who code every day.",
-    features: ["30 day unlimited access", "All 10 AI models", "Cloud workspace", "Terminal access", "GitHub integration", "BYOK support", "Priority routing"],
-    popular: false,
-    highlight: false,
-  },
+  { id: "1h", name: "Starter", duration: "1 hour", price: "$1.99", description: "Perfect for a quick fix or a single feature.", features: ["1 hr unlimited access", "All 10 AI models", "Cloud workspace", "Terminal access"], popular: false, highlight: false },
+  { id: "6h", name: "Builder", duration: "6 hours", price: "$3.99", description: "A solid work session. Ship a full feature.", features: ["6 hr unlimited access", "All 10 AI models", "Cloud workspace", "Terminal access", "GitHub integration"], popular: false, highlight: false },
+  { id: "24h", name: "Day Pass", duration: "24 hours", price: "$9.99", description: "A full day to build, debug, and ship.", features: ["24 hr unlimited access", "All 10 AI models", "Cloud workspace", "Terminal access", "GitHub integration", "BYOK support"], popular: true, highlight: true },
+  { id: "7d", name: "Week", duration: "7 days", price: "$22.99", description: "Launch a whole project. Build something real.", features: ["7 day unlimited access", "All 10 AI models", "Cloud workspace", "Terminal access", "GitHub integration", "BYOK support", "Priority routing"], popular: false, highlight: false },
+  { id: "30d", name: "Monthly", duration: "30 days", price: "$44.99", description: "For those who code every day.", features: ["30 day unlimited access", "All 10 AI models", "Cloud workspace", "Terminal access", "GitHub integration", "BYOK support", "Priority routing"], popular: false, highlight: false },
 ];
 
 const CHECKOUT_URLS: Record<string, string> = {
@@ -67,24 +22,19 @@ export function Pricing() {
   return (
     <section
       id="pricing"
-      style={{ borderTop: "1px solid var(--color-border)", paddingTop: "7rem", paddingBottom: "7rem" }}
+      className="flex flex-col items-center"
+      style={{ borderTop: "1px solid var(--color-border)", paddingTop: "7rem", paddingBottom: "7rem", textAlign: "center" }}
     >
-      <div className="max-w-6xl mx-auto px-6" style={{ textAlign: "center" }}>
+      <div className="w-full max-w-6xl px-6">
         <div style={{ marginBottom: "3.5rem" }}>
-          <div
-            className="text-sm font-mono uppercase tracking-widest"
-            style={{ color: "var(--color-accent)", marginBottom: "1rem" }}
-          >
+          <p style={{ color: "var(--color-accent)", fontFamily: "var(--font-mono)", fontSize: "0.875rem", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "1rem", textAlign: "center" }}>
             Pricing
-          </div>
-          <h2
-            className="text-4xl md:text-5xl font-bold text-center"
-            style={{ color: "var(--color-text)" }}
-          >
+          </p>
+          <h2 style={{ color: "var(--color-text)", fontSize: "clamp(2rem, 5vw, 3rem)", fontWeight: 700, textAlign: "center" }}>
             No subscriptions.{" "}
             <span style={{ color: "var(--color-text-2)" }}>Pay for what you use.</span>
           </h2>
-          <p className="mt-4 text-base text-center" style={{ color: "var(--color-text-2)", maxWidth: "28rem", margin: "1rem auto 0" }}>
+          <p style={{ color: "var(--color-text-2)", fontSize: "1rem", marginTop: "1rem", maxWidth: "28rem", marginLeft: "auto", marginRight: "auto", textAlign: "center" }}>
             One-time purchase. Buy time, use time. No auto-renewals, no hidden limits.
           </p>
         </div>
@@ -93,92 +43,68 @@ export function Pricing() {
           {PLANS.map((plan) => (
             <div
               key={plan.id}
-              className="flex flex-col items-center text-center rounded-xl p-6 relative"
+              className="flex flex-col items-center"
               style={{
+                position: "relative",
+                borderRadius: "0.75rem",
+                padding: "1.5rem",
+                textAlign: "center",
                 background: plan.highlight
                   ? "linear-gradient(160deg, rgba(0,212,255,0.07) 0%, rgba(0,100,255,0.03) 100%)"
                   : "var(--color-surface)",
-                border: plan.highlight
-                  ? "1px solid rgba(0,212,255,0.3)"
-                  : "1px solid var(--color-border)",
+                border: plan.highlight ? "1px solid rgba(0,212,255,0.3)" : "1px solid var(--color-border)",
               }}
             >
               {plan.popular && (
-                <div
-                  className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full whitespace-nowrap"
-                  style={{
-                    background: "var(--color-accent)",
-                    color: "#000",
-                    fontFamily: "var(--font-mono)",
-                    fontSize: "10px",
-                    fontWeight: 600,
-                  }}
-                >
+                <div style={{ position: "absolute", top: "-0.75rem", left: "50%", transform: "translateX(-50%)", background: "var(--color-accent)", color: "#000", fontFamily: "var(--font-mono)", fontSize: "10px", fontWeight: 600, padding: "0.25rem 0.75rem", borderRadius: "9999px", whiteSpace: "nowrap" }}>
                   Most Popular
                 </div>
               )}
-
-              <div
-                className="text-sm font-mono uppercase tracking-wider text-center"
-                style={{ color: "var(--color-text-3)", marginBottom: "0.25rem" }}
-              >
+              <p style={{ color: "var(--color-text-3)", fontFamily: "var(--font-mono)", fontSize: "0.875rem", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.25rem", textAlign: "center" }}>
                 {plan.duration}
-              </div>
-              <div className="text-base font-semibold text-center" style={{ color: "var(--color-text)", marginBottom: "0.75rem" }}>
+              </p>
+              <p style={{ color: "var(--color-text)", fontSize: "1rem", fontWeight: 600, marginBottom: "0.75rem", textAlign: "center" }}>
                 {plan.name}
-              </div>
-
-              <div style={{ marginBottom: "1rem" }}>
-                <span
-                  className="text-3xl font-bold"
-                  style={{ color: "var(--color-text)", fontFamily: "var(--font-mono)" }}
-                >
+              </p>
+              <div style={{ marginBottom: "1rem", textAlign: "center" }}>
+                <span style={{ color: "var(--color-text)", fontFamily: "var(--font-mono)", fontSize: "1.875rem", fontWeight: 700 }}>
                   {plan.price}
                 </span>
-                <span className="text-sm" style={{ color: "var(--color-text-3)", marginLeft: "0.375rem" }}>one-time</span>
+                <span style={{ color: "var(--color-text-3)", fontSize: "0.875rem", marginLeft: "0.375rem" }}>one-time</span>
               </div>
-
-              <p className="text-sm text-center" style={{ color: "var(--color-text-2)", marginBottom: "1.25rem" }}>
+              <p style={{ color: "var(--color-text-2)", fontSize: "0.875rem", marginBottom: "1.25rem", textAlign: "center" }}>
                 {plan.description}
               </p>
-
-              <ul className="flex flex-col items-center gap-2 flex-1 w-full" style={{ marginBottom: "1.25rem" }}>
+              <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem", marginBottom: "1.25rem", flex: 1, width: "100%" }}>
                 {plan.features.map((f) => (
-                  <li key={f} className="flex items-center justify-center gap-2 text-sm text-center" style={{ color: "var(--color-text-2)" }}>
+                  <li key={f} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", color: "var(--color-text-2)", fontSize: "0.875rem", textAlign: "center" }}>
                     <IconCheck size={12} style={{ color: "var(--color-accent)", flexShrink: 0 } as React.CSSProperties} />
                     {f}
                   </li>
                 ))}
               </ul>
-
               <a
                 href={CHECKOUT_URLS[plan.id] ?? "#pricing"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 rounded-lg text-sm font-medium transition-all w-full"
                 style={{
-                  padding: "0.625rem 1.25rem",
+                  display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem",
+                  width: "100%", padding: "0.625rem 1.25rem", borderRadius: "0.5rem",
+                  fontSize: "0.875rem", fontWeight: 500, textDecoration: "none", textAlign: "center",
                   ...(plan.highlight
                     ? { background: "var(--color-accent)", color: "#000" }
                     : { background: "var(--color-surface-3)", color: "var(--color-text)", border: "1px solid var(--color-border-2)" }),
                 }}
-                onMouseEnter={(e) => {
-                  if (plan.highlight) e.currentTarget.style.background = "var(--color-accent-hover)";
-                  else e.currentTarget.style.borderColor = "var(--color-text-3)";
-                }}
-                onMouseLeave={(e) => {
-                  if (plan.highlight) e.currentTarget.style.background = "var(--color-accent)";
-                  else e.currentTarget.style.borderColor = "var(--color-border-2)";
-                }}
+                onMouseEnter={(e) => { if (plan.highlight) e.currentTarget.style.background = "var(--color-accent-hover)"; else e.currentTarget.style.borderColor = "var(--color-text-3)"; }}
+                onMouseLeave={(e) => { if (plan.highlight) e.currentTarget.style.background = "var(--color-accent)"; else e.currentTarget.style.borderColor = "var(--color-border-2)"; }}
               >
-                Buy {plan.duration}
-                <IconArrowRight size={13} />
+                Buy {plan.duration} <IconArrowRight size={13} />
               </a>
             </div>
           ))}
         </div>
 
-        <p className="text-sm text-center" style={{ color: "var(--color-text-3)", marginTop: "2.5rem" }}>
+        <p style={{ color: "var(--color-text-3)", fontSize: "0.875rem", marginTop: "2.5rem", textAlign: "center" }}>
           Payments processed by <span style={{ color: "var(--color-text-2)" }}>Polar.sh</span> — license key delivered instantly by email.
         </p>
       </div>

@@ -16,24 +16,19 @@ const MODELS = [
 export function ModelGrid() {
   return (
     <section
-      style={{ borderTop: "1px solid var(--color-border)", paddingTop: "7rem", paddingBottom: "7rem" }}
+      className="flex flex-col items-center"
+      style={{ borderTop: "1px solid var(--color-border)", paddingTop: "7rem", paddingBottom: "7rem", textAlign: "center" }}
     >
-      <div className="max-w-6xl mx-auto px-6" style={{ textAlign: "center" }}>
+      <div className="w-full max-w-6xl px-6">
         <div style={{ marginBottom: "3.5rem" }}>
-          <div
-            className="text-sm font-mono uppercase tracking-widest"
-            style={{ color: "var(--color-accent)", marginBottom: "1rem" }}
-          >
+          <p style={{ color: "var(--color-accent)", fontFamily: "var(--font-mono)", fontSize: "0.875rem", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "1rem", textAlign: "center" }}>
             Models
-          </div>
-          <h2
-            className="text-4xl md:text-5xl font-bold text-center"
-            style={{ color: "var(--color-text)" }}
-          >
+          </p>
+          <h2 style={{ color: "var(--color-text)", fontSize: "clamp(2rem, 5vw, 3rem)", fontWeight: 700, textAlign: "center" }}>
             10 models.{" "}
             <span style={{ color: "var(--color-text-2)" }}>All switching instantly.</span>
           </h2>
-          <p className="mt-3 text-base text-center" style={{ color: "var(--color-text-3)" }}>
+          <p style={{ color: "var(--color-text-3)", fontSize: "1rem", marginTop: "0.75rem", textAlign: "center" }}>
             Routed via OpenRouter. Switch mid-session at any time.
           </p>
         </div>
@@ -42,44 +37,24 @@ export function ModelGrid() {
           {MODELS.map((model) => (
             <div
               key={model.name + model.sub}
-              className="flex flex-col items-center text-center p-4 rounded-xl"
-              style={{
-                background: "var(--color-surface)",
-                border: "1px solid var(--color-border)",
-              }}
+              className="flex flex-col items-center"
+              style={{ background: "var(--color-surface)", border: "1px solid var(--color-border)", borderRadius: "0.75rem", padding: "1rem", textAlign: "center" }}
             >
-              <div
-                className="w-8 h-8 rounded-full mb-3"
-                style={{ background: model.color + "22", border: `1.5px solid ${model.color}55` }}
-              />
-              <div
-                className="font-medium text-sm mb-1 leading-tight text-center"
-                style={{ color: "var(--color-text)" }}
-              >
+              <div style={{ width: "2rem", height: "2rem", borderRadius: "9999px", marginBottom: "0.75rem", background: model.color + "22", border: `1.5px solid ${model.color}55` }} />
+              <p style={{ color: "var(--color-text)", fontWeight: 500, fontSize: "0.875rem", marginBottom: "0.25rem", textAlign: "center" }}>
                 {model.name}
-              </div>
-              <div
-                className="mb-2.5 text-center"
-                style={{ color: "var(--color-text-3)", fontFamily: "var(--font-mono)", fontSize: "11px" }}
-              >
+              </p>
+              <p style={{ color: "var(--color-text-3)", fontFamily: "var(--font-mono)", fontSize: "11px", marginBottom: "0.625rem", textAlign: "center" }}>
                 {model.sub}
-              </div>
-              <div
-                className="px-2 py-0.5 rounded-full w-full text-center"
-                style={{
-                  background: model.badgeColor + "18",
-                  color: model.badgeColor,
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "11px",
-                }}
-              >
+              </p>
+              <div style={{ background: model.badgeColor + "18", color: model.badgeColor, fontFamily: "var(--font-mono)", fontSize: "11px", borderRadius: "9999px", padding: "0.125rem 0.5rem", width: "100%", textAlign: "center" }}>
                 {model.badge}
               </div>
             </div>
           ))}
         </div>
 
-        <p className="text-sm mt-6 text-center" style={{ color: "var(--color-text-3)" }}>
+        <p style={{ color: "var(--color-text-3)", fontSize: "0.875rem", marginTop: "1.5rem", textAlign: "center" }}>
           BYOK users can connect their own OpenRouter key to access even more models.
         </p>
       </div>
