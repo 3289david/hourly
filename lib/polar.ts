@@ -38,7 +38,8 @@ async function polarGet(path: string, accessToken: string) {
 }
 
 export async function validatePolarLicense(
-  key: string
+  key: string,
+  activationLabel: string
 ): Promise<ValidatedLicense> {
   const accessToken = process.env.POLAR_ACCESS_TOKEN;
   const organizationId = process.env.POLAR_ORGANIZATION_ID;
@@ -68,13 +69,20 @@ export async function validatePolarLicense(
     key: string;
     status: string;
     customer_id: string;
+    usage: number;
+    limit_usage: number | null;
   };
 
   if (licenseData.status !== "granted" && licenseData.status !== "active") {
-    throw new Error("License key is not active");
+    throw new Error("This license key has already been used or is inactive");
   }
 
-  // Step 2: find the benefit grant that links this license key to an order
+  // Reject if usage is at or over limit
+  if (licenseData.limit_usage !== null && licenseData.usage >= licenseData.limit_usage) {
+    throw new Error("This license key has already been activated");
+  }
+
+  // Step 2: find the benefit grant → order → product_id
   const grantsData = (await polarGet(
     `/benefit-grants/?customer_id=${licenseData.customer_id}&limit=50`,
     accessToken
@@ -88,7 +96,6 @@ export async function validatePolarLicense(
     throw new Error("Could not find order for this license key — contact support");
   }
 
-  // Step 3: get the order to find product_id
   const order = (await polarGet(`/orders/${grant.order_id}`, accessToken)) as {
     product_id: string;
   };
@@ -99,6 +106,20 @@ export async function validatePolarLicense(
 
   if (!duration || !tier) {
     throw new Error("Unrecognized product — contact support");
+  }
+
+  // Step 3: activate the key to mark it as used (prevents reuse)
+  try {
+    await fetch(`${POLAR_BASE}/license-keys/activate`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ key, label: activationLabel }),
+    });
+  } catch {
+    // Non-fatal: key was valid, activation tracking may fail silently
   }
 
   return {

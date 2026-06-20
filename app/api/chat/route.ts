@@ -44,8 +44,14 @@ export async function POST(req: NextRequest) {
   }
 
   const lastUserMessage = messages.findLast((m) => m.role === "user")?.content ?? "";
-  const resolvedModelId =
+  let resolvedModelId =
     modelId === "auto" ? routeModel(lastUserMessage) : (modelId ?? "deepseek-r1");
+
+  // Trial sessions are restricted to free models only
+  if (session.tier === "trial") {
+    resolvedModelId = "qwen3-coder-free";
+  }
+
   const model = getModelById(resolvedModelId);
 
   const apiKey = session.byokKey ?? process.env.OPENROUTER_API_KEY;

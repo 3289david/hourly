@@ -1,16 +1,16 @@
 import { SignJWT, jwtVerify } from "jose";
-import type { PolarTier } from "./polar";
+
+export type SessionTier = "trial" | "1h" | "6h" | "24h" | "7d" | "30d";
 
 export interface SessionPayload {
   licenseKey: string;
-  tier: PolarTier;
+  tier: SessionTier;
   expiresAt: number;
   sessionId: string;
   byokKey?: string;
-  githubToken?: string;
 }
 
-const SESSION_COOKIE = "hourly_session";
+export const SESSION_COOKIE = "hourly_session";
 
 function getSecret(): Uint8Array {
   const secret = process.env.JWT_SECRET;
@@ -23,15 +23,12 @@ export async function createSessionToken(
 ): Promise<string> {
   const { v4: uuidv4 } = await import("uuid");
   const sessionId = payload.sessionId ?? uuidv4();
-  const expiresAt = payload.expiresAt;
 
-  const token = await new SignJWT({ ...payload, sessionId })
+  return new SignJWT({ ...payload, sessionId })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime(Math.floor(expiresAt / 1000))
+    .setExpirationTime(Math.floor(payload.expiresAt / 1000))
     .sign(getSecret());
-
-  return token;
 }
 
 export async function verifySession(
@@ -40,20 +37,11 @@ export async function verifySession(
   try {
     const { payload } = await jwtVerify(token, getSecret());
     const session = payload as unknown as SessionPayload;
-
     if (Date.now() > session.expiresAt) return null;
-
     return session;
   } catch {
     return null;
   }
 }
 
-export function getSessionCookieOptions(expiresAt: number): string {
-  const expires = new Date(expiresAt).toUTCString();
-  const isSecure =
-    process.env.NODE_ENV === "production" ? "; Secure" : "";
-  return `${SESSION_COOKIE}=%TOKEN%; Path=/; HttpOnly; SameSite=Lax; Expires=${expires}${isSecure}`;
-}
-
-export { SESSION_COOKIE };
+export { SESSION_COOKIE as SESSION_COOKIE_NAME };
