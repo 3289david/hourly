@@ -6,29 +6,33 @@ const STEPS = [
     step: "01",
     title: "Buy a time pass",
     description:
-      "Pick your plan — 1 hour, 6 hours, 24 hours, or longer. One payment via Stripe. No subscription. A license key is delivered to your email instantly.",
+      "Pick your plan — 1 hour, 6 hours, 24 hours, or longer. One payment via Stripe. No subscription. A license key lands in your email instantly.",
   },
   {
     icon: IconBolt,
     step: "02",
     title: "Activate your key",
     description:
-      "Paste your license key at hourly.dev/activate. Your session starts immediately. The clock begins the moment you enter the workspace.",
+      "Paste your license key at the activate page. Your session starts immediately — the clock begins the moment you enter the workspace.",
   },
   {
     icon: IconClock,
     step: "03",
     title: "Code without limits",
     description:
-      "Unlimited prompts, unlimited file edits, unlimited code generation. Pick any model. Clone repos, run terminal commands, ship features — all within your time window.",
+      "Unlimited prompts, unlimited edits, unlimited code generation. Pick any model. Clone repos, run terminals, ship features — all in your window.",
   },
 ];
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-28">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="text-center mb-16">
+    <section
+      id="how-it-works"
+      className="py-20"
+      style={{ borderTop: "1px solid var(--color-border)" }}
+    >
+      <div className="max-w-4xl mx-auto px-6">
+        <div className="text-center mb-12">
           <div
             className="text-xs font-mono uppercase tracking-widest mb-3"
             style={{ color: "var(--color-accent)" }}
@@ -36,40 +40,41 @@ export function HowItWorks() {
             How it works
           </div>
           <h2
-            className="text-3xl md:text-4xl font-bold"
+            className="text-2xl md:text-3xl font-bold"
             style={{ color: "var(--color-text)" }}
           >
             Three steps to start.
           </h2>
-          <p className="mt-3 text-base" style={{ color: "var(--color-text-2)" }}>
+          <p className="mt-3 text-sm" style={{ color: "var(--color-text-2)" }}>
             From zero to a running AI coding session in under two minutes.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 relative">
-          {/* Connector lines */}
-          <div
-            className="hidden md:block absolute top-8 left-1/3 right-1/3 h-px"
-            style={{ background: "var(--color-border-2)" }}
-            aria-hidden
-          />
-
+        <div className="grid md:grid-cols-3 gap-6">
           {STEPS.map((step) => (
-            <div key={step.step} className="relative flex flex-col items-center text-center">
+            <div
+              key={step.step}
+              className="flex flex-col items-center text-center p-6 rounded-xl"
+              style={{
+                background: "var(--color-surface)",
+                border: "1px solid var(--color-border)",
+              }}
+            >
               <div
-                className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 relative"
+                className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 relative"
                 style={{
                   background: "var(--color-surface-3)",
                   border: "1px solid var(--color-border-2)",
                 }}
               >
-                <step.icon size={24} className="text-accent" style={{ color: "var(--color-accent)" } as React.CSSProperties} />
+                <step.icon size={18} style={{ color: "var(--color-accent)" } as React.CSSProperties} />
                 <div
-                  className="absolute -top-2 -right-2 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
+                  className="absolute -top-2 -right-2 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold"
                   style={{
                     background: "var(--color-accent)",
                     color: "#000",
                     fontFamily: "var(--font-mono)",
+                    fontSize: "10px",
                   }}
                 >
                   {step.step.slice(1)}
@@ -77,13 +82,13 @@ export function HowItWorks() {
               </div>
 
               <h3
-                className="text-lg font-semibold mb-3"
+                className="text-sm font-semibold mb-2"
                 style={{ color: "var(--color-text)" }}
               >
                 {step.title}
               </h3>
               <p
-                className="text-sm leading-relaxed"
+                className="text-xs leading-relaxed"
                 style={{ color: "var(--color-text-2)" }}
               >
                 {step.description}

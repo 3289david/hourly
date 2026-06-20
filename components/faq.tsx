@@ -6,35 +6,31 @@ import { IconChevronDown } from "./icons";
 const FAQS = [
   {
     q: "What happens when my time runs out?",
-    a: "Your session ends and access to the workspace is paused. Your files are retained for 48 hours. You can purchase another pass at any time to continue where you left off.",
+    a: "Your session ends and workspace access is paused. Files are retained for 48 hours. You can purchase another pass to continue where you left off.",
   },
   {
     q: "When does the timer start?",
-    a: "The timer starts the moment you activate your license key and enter the workspace — not when you purchase. Take your time reading this page.",
+    a: "The timer starts the moment you activate your license key and enter the workspace — not when you purchase.",
   },
   {
     q: "Can I use my own API keys?",
-    a: "Yes. BYOK (Bring Your Own Key) lets you connect your own OpenRouter, DeepSeek, or model API keys. Your keys are encrypted in-session and never stored. BYOK sessions cost less because we're not paying for inference.",
+    a: "Yes. BYOK lets you connect your own OpenRouter or model-specific keys. Keys are encrypted in-session and never stored. BYOK sessions cost less because we're not paying for inference.",
   },
   {
     q: "Is there really no token limit?",
-    a: "During your session, yes — unlimited prompts and no token counting. We absorb the inference cost as a fixed operating expense. That's why we charge for time, not usage.",
+    a: "During your session, yes — unlimited prompts, no token counting. We absorb inference cost as a fixed operating expense. That's why we charge for time, not usage.",
   },
   {
     q: "What models are available?",
-    a: "DeepSeek R1 (reasoning), Qwen 2.5 Coder 32B (frontend/coding), Kimi (debugging/analysis), and GLM-4 (fast tasks). Auto mode selects the best one based on your prompt. More models are added regularly.",
-  },
-  {
-    q: "Can I share a session?",
-    a: "Each license key creates one session. You can use it from any browser, but concurrent multi-device access is not supported.",
+    a: "DeepSeek R1, Qwen3 Coder, Gemini 2.5 Flash, Kimi K2, Mistral Codestral, Llama 4 Scout, and more. Auto mode selects the best model for your task.",
   },
   {
     q: "What is the refund policy?",
-    a: "If you haven't activated your license key, we'll refund within 7 days of purchase. Once a session is activated, we can't refund used time. Reach out to support if you run into a technical issue.",
+    a: "If you haven't activated your key, we'll refund within 7 days of purchase. Once a session is active, we can't refund used time. Contact support if you hit a technical issue.",
   },
   {
     q: "How does GitHub integration work?",
-    a: "You provide a GitHub Personal Access Token in your workspace settings. The AI agent can then clone repos, read files, create commits, and push branches on your behalf — all within your workspace.",
+    a: "You provide a GitHub Personal Access Token in your workspace settings. The AI can then clone repos, read files, create commits, and push branches on your behalf.",
   },
 ];
 
@@ -44,11 +40,11 @@ export function FAQ() {
   return (
     <section
       id="faq"
-      className="py-28"
+      className="py-20"
       style={{ borderTop: "1px solid var(--color-border)" }}
     >
-      <div className="max-w-3xl mx-auto px-6">
-        <div className="text-center mb-16">
+      <div className="max-w-2xl mx-auto px-6">
+        <div className="text-center mb-10">
           <div
             className="text-xs font-mono uppercase tracking-widest mb-3"
             style={{ color: "var(--color-accent)" }}
@@ -56,36 +52,36 @@ export function FAQ() {
             FAQ
           </div>
           <h2
-            className="text-3xl md:text-4xl font-bold"
+            className="text-2xl md:text-3xl font-bold"
             style={{ color: "var(--color-text)" }}
           >
             Common questions.
           </h2>
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1.5">
           {FAQS.map((faq, i) => (
             <div
               key={i}
-              className="rounded-xl overflow-hidden"
+              className="rounded-lg overflow-hidden"
               style={{
                 background: "var(--color-surface)",
                 border: "1px solid var(--color-border)",
               }}
             >
               <button
-                className="w-full text-left flex items-center justify-between px-5 py-4 gap-4"
+                className="w-full text-left flex items-center justify-between px-4 py-3 gap-4"
                 onClick={() => setOpen(open === i ? null : i)}
                 aria-expanded={open === i}
               >
                 <span
-                  className="font-medium text-sm"
+                  className="text-sm font-medium"
                   style={{ color: "var(--color-text)" }}
                 >
                   {faq.q}
                 </span>
                 <IconChevronDown
-                  size={16}
+                  size={14}
                   style={{
                     color: "var(--color-text-3)",
                     flexShrink: 0,
@@ -97,7 +93,7 @@ export function FAQ() {
 
               {open === i && (
                 <div
-                  className="px-5 pb-4 text-sm leading-relaxed"
+                  className="px-4 pb-3 text-xs leading-relaxed"
                   style={{ color: "var(--color-text-2)" }}
                 >
                   {faq.a}
