@@ -28,7 +28,7 @@ export function HowItWorks() {
   return (
     <section
       id="how-it-works"
-      className="py-20"
+      className="py-24"
       style={{ borderTop: "1px solid var(--color-border)" }}
     >
       <div className="max-w-4xl mx-auto px-6">
@@ -40,7 +40,7 @@ export function HowItWorks() {
             How it works
           </div>
           <h2
-            className="text-2xl md:text-3xl font-bold"
+            className="text-3xl md:text-4xl font-bold"
             style={{ color: "var(--color-text)" }}
           >
             Three steps to start.

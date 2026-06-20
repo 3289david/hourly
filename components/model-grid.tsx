@@ -16,7 +16,7 @@ const MODELS = [
 export function ModelGrid() {
   return (
     <section
-      className="py-20"
+      className="py-24"
       style={{ borderTop: "1px solid var(--color-border)" }}
     >
       <div className="max-w-6xl mx-auto px-6">
@@ -28,7 +28,7 @@ export function ModelGrid() {
             Models
           </div>
           <h2
-            className="text-2xl md:text-3xl font-bold"
+            className="text-3xl md:text-4xl font-bold"
             style={{ color: "var(--color-text)" }}
           >
             10 models.{" "}

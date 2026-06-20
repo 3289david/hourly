@@ -5,7 +5,7 @@ import { IconArrowRight } from "./icons";
 export function CTABanner() {
   return (
     <section
-      className="py-20"
+      className="py-24"
       style={{ borderTop: "1px solid var(--color-border)" }}
     >
       <div className="max-w-2xl mx-auto px-6 text-center">
@@ -17,7 +17,7 @@ export function CTABanner() {
         </div>
 
         <h2
-          className="text-2xl md:text-3xl font-bold mb-3"
+          className="text-3xl md:text-4xl font-bold mb-3"
           style={{ color: "var(--color-text)" }}
         >
           $1.99 for an hour of unlimited AI.
