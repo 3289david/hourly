@@ -85,11 +85,25 @@ export function WorkspaceHeader({
             color: "var(--color-text-2)",
           }}
         >
-          {MODELS.map((m) => (
-            <option key={m.id} value={m.id}>
-              {m.id === "auto" ? "Auto" : m.name}
-            </option>
-          ))}
+            <option value="auto">Auto</option>
+            <optgroup label="Reasoning">
+              <option value="deepseek-r1">DeepSeek R1 (May 2025)</option>
+              <option value="gemini-flash">Gemini 2.5 Flash</option>
+            </optgroup>
+            <optgroup label="Coding">
+              <option value="qwen3-coder">Qwen3 Coder</option>
+              <option value="codestral">Codestral 2508</option>
+              <option value="deepseek-v3">DeepSeek V3</option>
+            </optgroup>
+            <optgroup label="Debug">
+              <option value="kimi-k2">Kimi K2</option>
+            </optgroup>
+            <optgroup label="Fast / Cheap">
+              <option value="deepseek-v4-flash">DeepSeek V4 Flash</option>
+              <option value="gemini-flash-lite">Gemini Flash Lite</option>
+              <option value="llama4-scout">Llama 4 Scout</option>
+              <option value="qwen3-coder-free">Qwen3 Coder (Free)</option>
+            </optgroup>
         </select>
       </div>
 

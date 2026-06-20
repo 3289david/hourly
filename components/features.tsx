@@ -20,7 +20,7 @@ const FEATURES = [
     icon: IconCpu,
     title: "Multi-Model Selection",
     description:
-      "Switch between DeepSeek R1, Qwen 2.5 Coder, Kimi, and GLM-4 mid-session. Or let Smart Routing pick the best model automatically based on your task.",
+      "10 models including DeepSeek R1 (May 2025), Qwen3 Coder, Gemini 2.5 Flash, Kimi K2, Mistral Codestral, Llama 4 Scout, and more. Switch mid-session or let Auto Routing pick based on your task.",
   },
   {
     icon: IconTerminal,

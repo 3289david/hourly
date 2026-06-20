@@ -235,15 +235,21 @@ Workspace files are stored at `WORKSPACE_ROOT/{sessionId}/` and retained for 48 
 
 ## AI Models
 
-| Model | ID | Best for |
-|---|---|---|
-| DeepSeek R1 | `deepseek/deepseek-r1` | Reasoning, algorithms, Python, backend |
-| Qwen 2.5 Coder 32B | `qwen/qwen-2.5-coder-32b-instruct` | Frontend, React, TypeScript |
-| Kimi | `moonshotai/moonshot-v1-8k` | Debugging, code review, analysis |
-| GLM-4 | `thudm/glm-4-9b` | Fast tasks, quick edits |
-| Auto | — | Routes based on keywords in the prompt |
+| ID | Model | Best for | Price (input/1M) |
+|---|---|---|---|
+| `deepseek-r1` | DeepSeek R1 (May 2025) | Reasoning, algorithms, math | $0.50 |
+| `gemini-flash` | Gemini 2.5 Flash | Reasoning, 1M context | $0.30 |
+| `qwen3-coder` | Qwen3 Coder | Frontend, React, TypeScript, 1M ctx | $0.22 |
+| `codestral` | Mistral Codestral 2508 | Code completion, backend | $0.30 |
+| `deepseek-v3` | DeepSeek V3 (Mar 2025) | General coding, APIs | $0.20 |
+| `kimi-k2` | Kimi K2 | Debugging, code review, analysis | $0.57 |
+| `deepseek-v4-flash` | DeepSeek V4 Flash | Fast tasks, 1M ctx | $0.09 |
+| `gemini-flash-lite` | Gemini 2.5 Flash Lite | Fast tasks, 1M ctx | $0.10 |
+| `llama4-scout` | Llama 4 Scout | General, 10M context | $0.10 |
+| `qwen3-coder-free` | Qwen3 Coder (Free) | Coding, free tier, rate-limited | $0.00 |
+| `auto` | Auto | Smart routes based on prompt keywords | — |
 
-Auto routing detects keywords in the user's message (`react`, `debug`, `algorithm`, etc.) and picks the best model automatically.
+Auto routing detects keywords in the user's message and routes to the best model — e.g. `react` → Qwen3 Coder, `debug` → Kimi K2, `algorithm` → DeepSeek R1, quick tasks → DeepSeek V4 Flash.
 
 All models are accessed via [OpenRouter](https://openrouter.ai), which provides a unified API.
 

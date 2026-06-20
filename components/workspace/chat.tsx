@@ -368,11 +368,25 @@ export function ChatPanel({ modelId, onModelChange, fileContext }: ChatPanelProp
               color: "var(--color-text-2)",
             }}
           >
-            {MODELS.map((m) => (
-              <option key={m.id} value={m.id}>
-                {m.id === "auto" ? "Auto (Smart Route)" : m.name}
-              </option>
-            ))}
+              <option value="auto">Auto — Smart Route</option>
+            <optgroup label="── Reasoning">
+              <option value="deepseek-r1">DeepSeek R1 (May 2025) · $0.50/1M</option>
+              <option value="gemini-flash">Gemini 2.5 Flash · $0.30/1M · 1M ctx</option>
+            </optgroup>
+            <optgroup label="── Coding">
+              <option value="qwen3-coder">Qwen3 Coder · $0.22/1M · 1M ctx</option>
+              <option value="codestral">Mistral Codestral 2508 · $0.30/1M</option>
+              <option value="deepseek-v3">DeepSeek V3 · $0.20/1M</option>
+            </optgroup>
+            <optgroup label="── Debug">
+              <option value="kimi-k2">Kimi K2 · $0.57/1M</option>
+            </optgroup>
+            <optgroup label="── Fast / Cheap">
+              <option value="deepseek-v4-flash">DeepSeek V4 Flash · $0.09/1M · 1M ctx</option>
+              <option value="gemini-flash-lite">Gemini 2.5 Flash Lite · $0.10/1M</option>
+              <option value="llama4-scout">Llama 4 Scout · $0.10/1M · 10M ctx</option>
+              <option value="qwen3-coder-free">Qwen3 Coder FREE · $0/1M</option>
+            </optgroup>
           </select>
 
           {messages.length > 0 && (
