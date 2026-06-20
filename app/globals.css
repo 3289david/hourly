@@ -53,7 +53,7 @@
 
 /* ─── Base ───────────────────────────────────────────────────────────────────── */
 html {
-  font-size: 15px;
+  font-size: 14px;
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
