@@ -189,24 +189,23 @@ export function WorkspaceHeader({
 
       {/* Right — extend + menu */}
       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", position: "relative" }}>
-        {isLow && (
-          <a
-            href="/#pricing"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              fontSize: "0.75rem",
-              fontWeight: 600,
-              padding: "0.375rem 0.875rem",
-              borderRadius: "0.5rem",
-              background: "var(--color-accent)",
-              color: "#000",
-              textDecoration: "none",
-            }}
-          >
-            Extend
-          </a>
-        )}
+        <a
+          href="/activate"
+          style={{
+            fontSize: "0.75rem",
+            fontWeight: 600,
+            padding: "0.375rem 0.875rem",
+            borderRadius: "0.5rem",
+            background: isLow ? "var(--color-accent)" : "var(--color-surface-3)",
+            border: isLow ? "none" : "1px solid var(--color-border)",
+            color: isLow ? "#000" : "var(--color-text-2)",
+            textDecoration: "none",
+          }}
+          onMouseEnter={(e) => { if (!isLow) { e.currentTarget.style.borderColor = "var(--color-accent)"; e.currentTarget.style.color = "var(--color-accent)"; } }}
+          onMouseLeave={(e) => { if (!isLow) { e.currentTarget.style.borderColor = "var(--color-border)"; e.currentTarget.style.color = "var(--color-text-2)"; } }}
+        >
+          {isLow ? "Extend Now" : "Add Time"}
+        </a>
 
         <button
           onClick={() => setShowMenu(!showMenu)}
