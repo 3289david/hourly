@@ -24,52 +24,76 @@ const TIER_NAMES: Record<string, PolarTier> = {
   [process.env.POLAR_PRODUCT_30D ?? "prod_30d"]: "30d",
 };
 
+const POLAR_BASE = "https://api.polar.sh/v1";
+
+async function polarGet(path: string, accessToken: string) {
+  const res = await fetch(`${POLAR_BASE}${path}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error((err as { detail?: string }).detail ?? `Polar API error: ${res.status}`);
+  }
+  return res.json();
+}
+
 export async function validatePolarLicense(
   key: string
 ): Promise<ValidatedLicense> {
   const accessToken = process.env.POLAR_ACCESS_TOKEN;
   const organizationId = process.env.POLAR_ORGANIZATION_ID;
 
-  if (!accessToken) {
-    throw new Error("Polar access token not configured");
-  }
+  if (!accessToken) throw new Error("Polar access token not configured");
 
-  const res = await fetch("https://api.polar.sh/v1/users/license-keys/validate", {
+  // Step 1: validate the license key
+  const validateRes = await fetch(`${POLAR_BASE}/license-keys/validate`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     },
-    body: JSON.stringify({
-      key,
-      organization_id: organizationId,
-    }),
+    body: JSON.stringify({ key, organization_id: organizationId }),
   });
 
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    if (res.status === 404 || res.status === 400) {
+  if (!validateRes.ok) {
+    const err = await validateRes.json().catch(() => ({}));
+    if (validateRes.status === 404 || validateRes.status === 400) {
       throw new Error("Invalid license key");
     }
-    throw new Error(
-      (err as { detail?: string }).detail ?? "Failed to validate license"
-    );
+    throw new Error((err as { detail?: string }).detail ?? "Failed to validate license");
   }
 
-  const data = (await res.json()) as {
+  const licenseData = (await validateRes.json()) as {
     id: string;
     key: string;
-    product_id: string;
     status: string;
-    usage?: { activations?: number; limit?: number };
-    activation_id?: string;
+    customer_id: string;
   };
 
-  if (data.status !== "granted" && data.status !== "active") {
+  if (licenseData.status !== "granted" && licenseData.status !== "active") {
     throw new Error("License key is not active");
   }
 
-  const productId = data.product_id;
+  // Step 2: find the benefit grant that links this license key to an order
+  const grantsData = (await polarGet(
+    `/benefit-grants/?customer_id=${licenseData.customer_id}&limit=50`,
+    accessToken
+  )) as { items: Array<{ order_id: string | null; properties?: { license_key_id?: string } }> };
+
+  const grant = grantsData.items.find(
+    (g) => g.properties?.license_key_id === licenseData.id && g.order_id
+  );
+
+  if (!grant?.order_id) {
+    throw new Error("Could not find order for this license key — contact support");
+  }
+
+  // Step 3: get the order to find product_id
+  const order = (await polarGet(`/orders/${grant.order_id}`, accessToken)) as {
+    product_id: string;
+  };
+
+  const productId = order.product_id;
   const duration = TIER_DURATIONS[productId];
   const tier = TIER_NAMES[productId];
 
@@ -78,10 +102,10 @@ export async function validatePolarLicense(
   }
 
   return {
-    key: data.key,
+    key: licenseData.key,
     tier,
     durationMs: duration,
-    activationId: data.activation_id ?? data.id,
+    activationId: licenseData.id,
     productId,
   };
 }
