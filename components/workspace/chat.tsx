@@ -16,6 +16,13 @@ interface ChatPanelProps {
   fileContext?: string;
 }
 
+const SUGGESTIONS = [
+  "Refactor this component to use React hooks",
+  "Find the bug causing this TypeScript error",
+  "Write a REST API for user authentication",
+  "Optimize this SQL query for performance",
+];
+
 export function ChatPanel({ modelId, onModelChange, fileContext }: ChatPanelProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -33,7 +40,7 @@ export function ChatPanel({ modelId, onModelChange, fileContext }: ChatPanelProp
     const el = textareaRef.current;
     if (!el) return;
     el.style.height = "auto";
-    el.style.height = Math.min(el.scrollHeight, 200) + "px";
+    el.style.height = Math.min(el.scrollHeight, 160) + "px";
   }
 
   async function sendMessage() {
@@ -67,13 +74,7 @@ export function ChatPanel({ modelId, onModelChange, fileContext }: ChatPanelProp
 
       if (!res.ok) {
         const err = (await res.json()) as { error?: string };
-        setMessages([
-          ...newMessages,
-          {
-            role: "assistant",
-            content: `Error: ${err.error ?? "Request failed"}`,
-          },
-        ]);
+        setMessages([...newMessages, { role: "assistant", content: `Error: ${err.error ?? "Request failed"}` }]);
         return;
       }
 
@@ -84,51 +85,28 @@ export function ChatPanel({ modelId, onModelChange, fileContext }: ChatPanelProp
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-
         const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split("\n");
-
-        for (const line of lines) {
+        for (const line of chunk.split("\n")) {
           if (!line.startsWith("data: ")) continue;
           const jsonStr = line.slice(6).trim();
           if (!jsonStr) continue;
-
           try {
-            const data = JSON.parse(jsonStr) as {
-              content?: string;
-              done?: boolean;
-              model?: string;
-              error?: string;
-            };
-
-            if (data.error) {
-              accumulated += `\n\nError: ${data.error}`;
-            } else if (data.content) {
-              accumulated += data.content;
-            }
-
+            const data = JSON.parse(jsonStr) as { content?: string; done?: boolean; model?: string; error?: string };
+            if (data.error) accumulated += `\n\nError: ${data.error}`;
+            else if (data.content) accumulated += data.content;
             setMessages((prev) => {
               const updated = [...prev];
-              updated[updated.length - 1] = {
-                ...updated[updated.length - 1],
-                content: accumulated,
-                model: data.model,
-              };
+              updated[updated.length - 1] = { ...updated[updated.length - 1], content: accumulated, model: data.model };
               return updated;
             });
-          } catch {
-            // skip malformed SSE line
-          }
+          } catch { /* skip malformed */ }
         }
       }
     } catch (err) {
       if ((err as Error).name !== "AbortError") {
         setMessages((prev) => {
           const updated = [...prev];
-          updated[updated.length - 1] = {
-            ...updated[updated.length - 1],
-            content: "Connection error. Please try again.",
-          };
+          updated[updated.length - 1] = { ...updated[updated.length - 1], content: "Connection error. Please try again." };
           return updated;
         });
       }
@@ -157,56 +135,49 @@ export function ChatPanel({ modelId, onModelChange, fileContext }: ChatPanelProp
   }
 
   return (
-    <div className="flex flex-col h-full" style={{ background: "var(--color-surface)" }}>
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4">
+    <div style={{ display: "flex", flexDirection: "column", height: "100%", background: "var(--color-surface)" }}>
+
+      {/* Messages area */}
+      <div style={{ flex: 1, overflowY: "auto", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+
         {messages.length === 0 && (
-          <div className="flex-1 flex flex-col items-center justify-center text-center py-16">
-            <div
-              className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4"
-              style={{
-                background: "var(--color-accent-dim)",
-                border: "1px solid var(--color-accent)",
-                color: "var(--color-accent)",
-              }}
-            >
-              <IconSparkle size={20} />
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "3rem 1rem" }}>
+            <div style={{
+              width: "3.5rem", height: "3.5rem", borderRadius: "1rem",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              background: "var(--color-accent-dim)", border: "1px solid rgba(0,212,255,0.25)",
+              color: "var(--color-accent)", marginBottom: "1.25rem",
+            }}>
+              <IconSparkle size={24} />
             </div>
-            <p
-              className="font-medium mb-1"
-              style={{ color: "var(--color-text)" }}
-            >
+            <p style={{ color: "var(--color-text)", fontSize: "1.125rem", fontWeight: 600, marginBottom: "0.375rem" }}>
               Start coding with AI
             </p>
-            <p className="text-sm" style={{ color: "var(--color-text-3)" }}>
-              Ask anything — write code, debug, refactor, explain.
+            <p style={{ color: "var(--color-text-2)", fontSize: "0.875rem", lineHeight: 1.6, maxWidth: "22rem", marginBottom: "2rem" }}>
+              Ask anything — write code, debug, refactor, or explain concepts.
             </p>
-            <div className="mt-6 flex flex-col gap-2 w-full max-w-sm">
-              {[
-                "Refactor this component to use React hooks",
-                "Find the bug causing this TypeScript error",
-                "Write a REST API for user authentication",
-                "Optimize this SQL query for performance",
-              ].map((prompt) => (
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.625rem", width: "100%", maxWidth: "26rem" }}>
+              {SUGGESTIONS.map((prompt) => (
                 <button
                   key={prompt}
-                  className="text-left px-4 py-2.5 rounded-xl text-sm transition-colors"
+                  onClick={() => { setInput(prompt); textareaRef.current?.focus(); }}
                   style={{
+                    textAlign: "left", padding: "0.75rem 1rem",
+                    borderRadius: "0.75rem", fontSize: "0.875rem",
                     background: "var(--color-surface-2)",
                     border: "1px solid var(--color-border)",
-                    color: "var(--color-text-2)",
-                  }}
-                  onClick={() => {
-                    setInput(prompt);
-                    textareaRef.current?.focus();
+                    color: "var(--color-text-2)", cursor: "pointer",
+                    lineHeight: 1.4,
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.borderColor = "var(--color-border-2)";
                     e.currentTarget.style.color = "var(--color-text)";
+                    e.currentTarget.style.background = "var(--color-surface-3)";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.borderColor = "var(--color-border)";
                     e.currentTarget.style.color = "var(--color-text-2)";
+                    e.currentTarget.style.background = "var(--color-surface-2)";
                   }}
                 >
                   {prompt}
@@ -217,195 +188,183 @@ export function ChatPanel({ modelId, onModelChange, fileContext }: ChatPanelProp
         )}
 
         {messages.map((msg, i) => (
-          <div
-            key={i}
-            className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-          >
-            <div
-              className="max-w-[85%] group"
-              style={{ position: "relative" }}
-            >
+          <div key={i} style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start" }}>
+            <div style={{ maxWidth: "82%", position: "relative" }} className="group">
+
               {msg.role === "assistant" && (
-                <div
-                  className="text-xs mb-1 flex items-center gap-1"
-                  style={{ color: "var(--color-text-3)" }}
-                >
-                  <IconSparkle size={10} />
-                  {msg.model
-                    ? MODELS.find((m) => m.id === msg.model)?.name ?? msg.model
-                    : "AI"}
+                <div style={{ display: "flex", alignItems: "center", gap: "0.375rem", marginBottom: "0.375rem" }}>
+                  <IconSparkle size={11} style={{ color: "var(--color-accent)" } as React.CSSProperties} />
+                  <span style={{ color: "var(--color-text-3)", fontSize: "0.7rem", fontWeight: 500, letterSpacing: "0.05em", textTransform: "uppercase" }}>
+                    {msg.model ? (MODELS.find((m) => m.id === msg.model)?.name ?? msg.model) : "AI"}
+                  </span>
                 </div>
               )}
-              <div
-                className="px-4 py-3 rounded-2xl text-sm leading-relaxed"
-                style={
-                  msg.role === "user"
-                    ? {
-                        background: "var(--color-accent)",
-                        color: "#000",
-                        borderBottomRightRadius: "4px",
-                      }
-                    : {
-                        background: "var(--color-surface-3)",
-                        color: "var(--color-text)",
-                        border: "1px solid var(--color-border)",
-                        borderBottomLeftRadius: "4px",
-                        whiteSpace: "pre-wrap",
-                        fontFamily: msg.content.includes("```")
-                          ? "inherit"
-                          : undefined,
-                      }
-                }
-              >
+
+              <div style={msg.role === "user" ? {
+                padding: "0.75rem 1rem",
+                borderRadius: "1rem", borderBottomRightRadius: "0.25rem",
+                background: "var(--color-accent)",
+                color: "#000", fontSize: "0.9rem", lineHeight: 1.6, fontWeight: 450,
+              } : {
+                padding: "0.875rem 1.125rem",
+                borderRadius: "1rem", borderBottomLeftRadius: "0.25rem",
+                background: "var(--color-surface-3)",
+                border: "1px solid var(--color-border)",
+                color: "var(--color-text)", fontSize: "0.9rem", lineHeight: 1.7,
+                whiteSpace: "pre-wrap",
+              }}>
                 {msg.content || (
-                  <span
-                    style={{
-                      display: "inline-block",
-                      width: "8px",
-                      height: "14px",
-                      background: "var(--color-accent)",
-                      animation: "blink 1s step-end infinite",
-                      verticalAlign: "middle",
-                    }}
-                  />
+                  <span style={{ display: "inline-block", width: "8px", height: "15px", background: "var(--color-accent)", animation: "blink 1s step-end infinite", verticalAlign: "middle", borderRadius: "1px" }} />
                 )}
               </div>
 
               {msg.role === "assistant" && msg.content && (
                 <button
-                  className="absolute top-6 right-2 opacity-0 group-hover:opacity-100 p-1 rounded transition-opacity"
-                  style={{ color: "var(--color-text-3)" }}
+                  className="group-hover-show"
+                  style={{
+                    position: "absolute", top: "2rem", right: "-1.75rem",
+                    opacity: 0, padding: "0.25rem", borderRadius: "0.375rem",
+                    color: "var(--color-text-3)", background: "transparent", border: "none", cursor: "pointer",
+                  }}
                   onClick={() => copyMessage(msg.content, i)}
                   title="Copy"
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-text)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-text-3)")}
                 >
                   {copiedIdx === i ? (
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden>
-                      <polyline points="20,6 9,17 4,12" stroke="#00ff88" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <polyline points="20,6 9,17 4,12" stroke="var(--color-success)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
-                  ) : (
-                    <IconCopy size={13} />
-                  )}
+                  ) : <IconCopy size={13} />}
                 </button>
               )}
             </div>
           </div>
         ))}
+
         <div ref={bottomRef} />
       </div>
 
-      {/* Input */}
-      <div
-        className="p-3"
-        style={{ borderTop: "1px solid var(--color-border)" }}
-      >
-        <div
-          className="flex items-end gap-2 rounded-xl px-3 py-2"
-          style={{
-            background: "var(--color-surface-3)",
-            border: "1px solid var(--color-border-2)",
-          }}
-        >
+      {/* Input area */}
+      <div style={{ padding: "0 1rem 1rem", flexShrink: 0 }}>
+        {/* Model selector row */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.625rem", padding: "0 0.25rem" }}>
+          <select
+            value={modelId}
+            onChange={(e) => onModelChange(e.target.value)}
+            style={{
+              background: "var(--color-surface-3)",
+              border: "1px solid var(--color-border)",
+              color: "var(--color-text-2)",
+              borderRadius: "0.5rem",
+              padding: "0.375rem 0.625rem",
+              fontSize: "0.75rem",
+              outline: "none",
+              cursor: "pointer",
+              maxWidth: "260px",
+            }}
+          >
+            <option value="auto">Auto — Smart Route</option>
+            <optgroup label="Reasoning">
+              <option value="deepseek-r1">DeepSeek R1 · $0.50/1M</option>
+              <option value="gemini-flash">Gemini 2.5 Flash · 1M ctx</option>
+            </optgroup>
+            <optgroup label="Coding">
+              <option value="qwen3-coder">Qwen3 Coder · 1M ctx</option>
+              <option value="codestral">Codestral 2508</option>
+              <option value="deepseek-v3">DeepSeek V3</option>
+            </optgroup>
+            <optgroup label="Debug">
+              <option value="kimi-k2">Kimi K2</option>
+            </optgroup>
+            <optgroup label="Fast / Free">
+              <option value="deepseek-v4-flash">DeepSeek V4 Flash · 1M ctx</option>
+              <option value="gemini-flash-lite">Gemini Flash Lite</option>
+              <option value="llama4-scout">Llama 4 Scout · 10M ctx</option>
+              <option value="qwen3-coder-free">Qwen3 Coder (Free)</option>
+            </optgroup>
+          </select>
+
+          {messages.length > 0 && (
+            <button
+              style={{ fontSize: "0.75rem", color: "var(--color-text-3)", background: "none", border: "none", cursor: "pointer", padding: "0.25rem 0.5rem" }}
+              onClick={() => setMessages([])}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-error)")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-text-3)")}
+            >
+              Clear chat
+            </button>
+          )}
+        </div>
+
+        {/* Textarea + send */}
+        <div style={{
+          display: "flex", alignItems: "flex-end", gap: "0.625rem",
+          background: "var(--color-surface-3)",
+          border: "1px solid var(--color-border-2)",
+          borderRadius: "0.875rem",
+          padding: "0.75rem",
+        }}>
           <textarea
             ref={textareaRef}
             value={input}
-            onChange={(e) => {
-              setInput(e.target.value);
-              autoResize();
-            }}
+            onChange={(e) => { setInput(e.target.value); autoResize(); }}
             onKeyDown={handleKeyDown}
-            placeholder="Ask AI anything... (Enter to send, Shift+Enter for newline)"
+            placeholder="Ask AI anything… (Enter to send, Shift+Enter for newline)"
             rows={1}
-            className="flex-1 resize-none text-sm leading-relaxed bg-transparent border-none outline-none"
             style={{
-              color: "var(--color-text)",
-              minHeight: "24px",
-              maxHeight: "200px",
+              flex: 1, resize: "none", background: "transparent",
+              border: "none", outline: "none",
+              color: "var(--color-text)", fontSize: "0.9375rem",
+              lineHeight: 1.55, minHeight: "1.5rem", maxHeight: "160px",
+              fontFamily: "var(--font-sans)",
             }}
           />
 
           {streaming ? (
             <button
               onClick={stopStream}
-              className="p-2 rounded-lg transition-colors flex-shrink-0"
               style={{
+                flexShrink: 0, width: "2.25rem", height: "2.25rem",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                borderRadius: "0.625rem", cursor: "pointer",
                 background: "rgba(255,68,68,0.1)",
-                color: "var(--color-error)",
                 border: "1px solid rgba(255,68,68,0.3)",
+                color: "var(--color-error)",
               }}
               title="Stop"
             >
-              <IconStop size={14} />
+              <IconStop size={16} />
             </button>
           ) : (
             <button
               onClick={sendMessage}
               disabled={!input.trim()}
-              className="p-2 rounded-lg transition-all flex-shrink-0"
               style={{
-                background: input.trim()
-                  ? "var(--color-accent)"
-                  : "var(--color-surface)",
+                flexShrink: 0, width: "2.25rem", height: "2.25rem",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                borderRadius: "0.625rem", cursor: input.trim() ? "pointer" : "default",
+                background: input.trim() ? "var(--color-accent)" : "var(--color-surface)",
+                border: "none",
                 color: input.trim() ? "#000" : "var(--color-text-3)",
-                cursor: input.trim() ? "pointer" : "default",
+                transition: "all 0.15s",
               }}
               title="Send (Enter)"
             >
-              <IconSend size={14} />
+              <IconSend size={16} />
             </button>
           )}
         </div>
 
-        <div
-          className="flex items-center justify-between mt-2 px-1"
-        >
-          <select
-            value={modelId}
-            onChange={(e) => onModelChange(e.target.value)}
-            className="text-xs rounded-lg px-2 py-1 outline-none"
-            style={{
-              background: "var(--color-surface-3)",
-              border: "1px solid var(--color-border)",
-              color: "var(--color-text-2)",
-            }}
-          >
-              <option value="auto">Auto — Smart Route</option>
-            <optgroup label="── Reasoning">
-              <option value="deepseek-r1">DeepSeek R1 (May 2025) · $0.50/1M</option>
-              <option value="gemini-flash">Gemini 2.5 Flash · $0.30/1M · 1M ctx</option>
-            </optgroup>
-            <optgroup label="── Coding">
-              <option value="qwen3-coder">Qwen3 Coder · $0.22/1M · 1M ctx</option>
-              <option value="codestral">Mistral Codestral 2508 · $0.30/1M</option>
-              <option value="deepseek-v3">DeepSeek V3 · $0.20/1M</option>
-            </optgroup>
-            <optgroup label="── Debug">
-              <option value="kimi-k2">Kimi K2 · $0.57/1M</option>
-            </optgroup>
-            <optgroup label="── Fast / Cheap">
-              <option value="deepseek-v4-flash">DeepSeek V4 Flash · $0.09/1M · 1M ctx</option>
-              <option value="gemini-flash-lite">Gemini 2.5 Flash Lite · $0.10/1M</option>
-              <option value="llama4-scout">Llama 4 Scout · $0.10/1M · 10M ctx</option>
-              <option value="qwen3-coder-free">Qwen3 Coder FREE · $0/1M</option>
-            </optgroup>
-          </select>
-
-          {messages.length > 0 && (
-            <button
-              className="text-xs transition-colors"
-              style={{ color: "var(--color-text-3)" }}
-              onClick={() => setMessages([])}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.color = "var(--color-text-2)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.color = "var(--color-text-3)")
-              }
-            >
-              Clear chat
-            </button>
-          )}
-        </div>
+        <p style={{ color: "var(--color-text-3)", fontSize: "0.7rem", marginTop: "0.5rem", textAlign: "center" }}>
+          AI may make mistakes — review important code before deploying
+        </p>
       </div>
+
+      <style>{`
+        .group:hover .group-hover-show { opacity: 1 !important; }
+        @keyframes blink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
+      `}</style>
     </div>
   );
 }

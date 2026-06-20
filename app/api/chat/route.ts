@@ -69,16 +69,26 @@ export async function POST(req: NextRequest) {
     ? `${SYSTEM_PROMPT}\n\nCurrent workspace context:\n${fileContext}`
     : SYSTEM_PROMPT;
 
-  const stream = await client.chat.completions.create({
-    model: model.openRouterId,
-    messages: [
-      { role: "system", content: systemContent },
-      ...messages,
-    ],
-    stream: true,
-    max_tokens: 4096,
-    temperature: 0.3,
-  });
+  let stream;
+  try {
+    stream = await client.chat.completions.create({
+      model: model.openRouterId,
+      messages: [
+        { role: "system", content: systemContent },
+        ...messages,
+      ],
+      stream: true,
+      max_tokens: 4096,
+      temperature: 0.3,
+    });
+  } catch (err) {
+    const status = (err as { status?: number }).status ?? 500;
+    const message =
+      status === 429
+        ? "Rate limit reached — try switching to a different model or wait a moment."
+        : (err instanceof Error ? err.message : "AI request failed");
+    return NextResponse.json({ error: message }, { status });
+  }
 
   const encoder = new TextEncoder();
 

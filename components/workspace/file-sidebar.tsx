@@ -39,79 +39,46 @@ export function FileSidebar({ onFileSelect, activeFile }: FileSidebarProps) {
     }
   }, []);
 
-  useEffect(() => {
-    loadFiles();
-  }, [loadFiles]);
+  useEffect(() => { loadFiles(); }, [loadFiles]);
 
   async function openFile(file: FileEntry) {
-    if (file.isDir) {
-      loadFiles(file.path);
-      return;
-    }
-
+    if (file.isDir) { loadFiles(file.path); return; }
     try {
-      const res = await fetch(
-        `/api/files?action=read&path=${encodeURIComponent(file.path)}`
-      );
-      const data = (await res.json()) as { content?: string; error?: string };
-      if (data.content !== undefined) {
-        onFileSelect(file.path, data.content);
-      }
-    } catch {
-      // ignore
-    }
+      const res = await fetch(`/api/files?action=read&path=${encodeURIComponent(file.path)}`);
+      const data = (await res.json()) as { content?: string };
+      if (data.content !== undefined) onFileSelect(file.path, data.content);
+    } catch { /* ignore */ }
   }
 
   async function deleteFile(file: FileEntry, e: React.MouseEvent) {
     e.stopPropagation();
     if (!confirm(`Delete ${file.name}?`)) return;
-
-    await fetch(`/api/files?path=${encodeURIComponent(file.path)}`, {
-      method: "DELETE",
-    });
+    await fetch(`/api/files?path=${encodeURIComponent(file.path)}`, { method: "DELETE" });
     loadFiles();
   }
 
   async function createFile() {
     if (!newFileName.trim()) return;
-
     await fetch("/api/files", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ path: newFileName.trim(), content: "" }),
     });
-
-    setNewFileName("");
-    setShowNewFile(false);
-    loadFiles();
+    setNewFileName(""); setShowNewFile(false); loadFiles();
   }
 
   async function handleClone() {
     if (!repoUrl.trim()) return;
-    setCloning(true);
-    setCloneError("");
-
+    setCloning(true); setCloneError("");
     try {
       const res = await fetch("/api/github/clone", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          repoUrl: repoUrl.trim(),
-          githubToken: githubToken.trim() || undefined,
-        }),
+        body: JSON.stringify({ repoUrl: repoUrl.trim(), githubToken: githubToken.trim() || undefined }),
       });
-
-      const data = (await res.json()) as { ok?: boolean; error?: string; repoName?: string };
-
-      if (!res.ok || !data.ok) {
-        setCloneError(data.error ?? "Clone failed");
-        return;
-      }
-
-      setShowClone(false);
-      setRepoUrl("");
-      setGithubToken("");
-      loadFiles();
+      const data = (await res.json()) as { ok?: boolean; error?: string };
+      if (!res.ok || !data.ok) { setCloneError(data.error ?? "Clone failed"); return; }
+      setShowClone(false); setRepoUrl(""); setGithubToken(""); loadFiles();
     } catch {
       setCloneError("Network error");
     } finally {
@@ -120,163 +87,81 @@ export function FileSidebar({ onFileSelect, activeFile }: FileSidebarProps) {
   }
 
   return (
-    <div
-      className="flex flex-col h-full"
-      style={{
-        background: "var(--color-surface)",
-        borderRight: "1px solid var(--color-border)",
-      }}
-    >
+    <div style={{ display: "flex", flexDirection: "column", height: "100%", background: "var(--color-surface)", borderRight: "1px solid var(--color-border)" }}>
+
       {/* Header */}
-      <div
-        className="flex items-center justify-between px-3 py-2 flex-shrink-0"
-        style={{
-          borderBottom: "1px solid var(--color-border)",
-        }}
-      >
-        <span className="text-xs font-medium" style={{ color: "var(--color-text-3)" }}>
-          FILES
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 0.625rem", height: "38px", flexShrink: 0, borderBottom: "1px solid var(--color-border)" }}>
+        <span style={{ color: "var(--color-text-3)", fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase" }}>
+          Files
         </span>
-        <div className="flex items-center gap-1">
-          <button
-            title="Clone repository"
-            onClick={() => setShowClone(!showClone)}
-            className="p-1 rounded transition-colors"
-            style={{ color: "var(--color-text-3)" }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.color = "var(--color-text)")
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.color = "var(--color-text-3)")
-            }
-          >
-            <IconGitHub size={13} />
-          </button>
-          <button
-            title="New file"
-            onClick={() => setShowNewFile(!showNewFile)}
-            className="p-1 rounded transition-colors"
-            style={{ color: "var(--color-text-3)" }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.color = "var(--color-text)")
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.color = "var(--color-text-3)")
-            }
-          >
-            <IconPlus size={13} />
-          </button>
-          <button
-            title="Refresh"
-            onClick={() => loadFiles()}
-            className="p-1 rounded transition-colors"
-            style={{ color: "var(--color-text-3)" }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.color = "var(--color-text)")
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.color = "var(--color-text-3)")
-            }
-          >
-            <IconRefresh size={13} />
-          </button>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.125rem" }}>
+          {[
+            { icon: <IconGitHub size={13} />, title: "Clone repo", onClick: () => setShowClone(!showClone), active: showClone },
+            { icon: <IconPlus size={13} />, title: "New file", onClick: () => setShowNewFile(!showNewFile), active: showNewFile },
+            { icon: <IconRefresh size={13} />, title: "Refresh", onClick: () => loadFiles(), active: false },
+          ].map(({ icon, title, onClick, active }) => (
+            <button
+              key={title}
+              title={title}
+              onClick={onClick}
+              style={{
+                display: "flex", alignItems: "center", justifyContent: "center",
+                width: "24px", height: "24px", borderRadius: "0.375rem",
+                background: active ? "var(--color-accent-dim)" : "transparent",
+                border: "none",
+                color: active ? "var(--color-accent)" : "var(--color-text-3)",
+                cursor: "pointer",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = "var(--color-text)"; e.currentTarget.style.background = "var(--color-surface-3)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = active ? "var(--color-accent)" : "var(--color-text-3)"; e.currentTarget.style.background = active ? "var(--color-accent-dim)" : "transparent"; }}
+            >
+              {icon}
+            </button>
+          ))}
         </div>
       </div>
 
       {/* Clone panel */}
       {showClone && (
-        <div
-          className="p-3 flex flex-col gap-2"
-          style={{
-            borderBottom: "1px solid var(--color-border)",
-            background: "var(--color-surface-2)",
-          }}
-        >
+        <div style={{ padding: "0.75rem", borderBottom: "1px solid var(--color-border)", background: "var(--color-surface-2)", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+          <p style={{ color: "var(--color-text-3)", fontSize: "0.7rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em" }}>Clone Repository</p>
           <input
-            type="text"
-            value={repoUrl}
-            onChange={(e) => setRepoUrl(e.target.value)}
+            type="text" value={repoUrl} onChange={(e) => setRepoUrl(e.target.value)}
             placeholder="https://github.com/user/repo"
-            className="text-xs px-2 py-1.5 rounded-lg outline-none w-full"
-            style={{
-              background: "var(--color-surface-3)",
-              border: "1px solid var(--color-border-2)",
-              color: "var(--color-text)",
-              fontFamily: "var(--font-mono)",
-            }}
-            onFocus={(e) =>
-              (e.target.style.borderColor = "var(--color-accent)")
-            }
-            onBlur={(e) =>
-              (e.target.style.borderColor = "var(--color-border-2)")
-            }
+            style={{ width: "100%", padding: "0.5rem 0.625rem", borderRadius: "0.5rem", fontSize: "0.75rem", background: "var(--color-surface-3)", border: "1px solid var(--color-border-2)", color: "var(--color-text)", fontFamily: "var(--font-mono)", outline: "none", boxSizing: "border-box" }}
+            onFocus={(e) => (e.target.style.borderColor = "var(--color-accent)")}
+            onBlur={(e) => (e.target.style.borderColor = "var(--color-border-2)")}
           />
           <input
-            type="password"
-            value={githubToken}
-            onChange={(e) => setGithubToken(e.target.value)}
-            placeholder="GitHub token (for private repos)"
-            className="text-xs px-2 py-1.5 rounded-lg outline-none w-full"
-            style={{
-              background: "var(--color-surface-3)",
-              border: "1px solid var(--color-border-2)",
-              color: "var(--color-text)",
-            }}
-            onFocus={(e) =>
-              (e.target.style.borderColor = "var(--color-accent)")
-            }
-            onBlur={(e) =>
-              (e.target.style.borderColor = "var(--color-border-2)")
-            }
+            type="password" value={githubToken} onChange={(e) => setGithubToken(e.target.value)}
+            placeholder="Token (private repos)"
+            style={{ width: "100%", padding: "0.5rem 0.625rem", borderRadius: "0.5rem", fontSize: "0.75rem", background: "var(--color-surface-3)", border: "1px solid var(--color-border-2)", color: "var(--color-text)", outline: "none", boxSizing: "border-box" }}
+            onFocus={(e) => (e.target.style.borderColor = "var(--color-accent)")}
+            onBlur={(e) => (e.target.style.borderColor = "var(--color-border-2)")}
           />
-          {cloneError && (
-            <p className="text-xs" style={{ color: "var(--color-error)" }}>
-              {cloneError}
-            </p>
-          )}
+          {cloneError && <p style={{ color: "var(--color-error)", fontSize: "0.75rem" }}>{cloneError}</p>}
           <button
-            onClick={handleClone}
-            disabled={!repoUrl.trim() || cloning}
-            className="text-xs px-3 py-1.5 rounded-lg font-medium"
-            style={{
-              background: "var(--color-accent)",
-              color: "#000",
-              opacity: cloning ? 0.7 : 1,
-            }}
+            onClick={handleClone} disabled={!repoUrl.trim() || cloning}
+            style={{ padding: "0.5rem", borderRadius: "0.5rem", fontSize: "0.8rem", fontWeight: 600, background: "var(--color-accent)", color: "#000", border: "none", cursor: cloning ? "wait" : "pointer", opacity: cloning ? 0.7 : 1 }}
           >
-            {cloning ? "Cloning..." : "Clone"}
+            {cloning ? "Cloning…" : "Clone"}
           </button>
         </div>
       )}
 
       {/* New file panel */}
       {showNewFile && (
-        <div
-          className="p-3 flex gap-2"
-          style={{
-            borderBottom: "1px solid var(--color-border)",
-            background: "var(--color-surface-2)",
-          }}
-        >
+        <div style={{ padding: "0.625rem", borderBottom: "1px solid var(--color-border)", background: "var(--color-surface-2)", display: "flex", gap: "0.5rem" }}>
           <input
-            type="text"
-            value={newFileName}
+            type="text" value={newFileName}
             onChange={(e) => setNewFileName(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && createFile()}
-            placeholder="filename.ts"
-            autoFocus
-            className="flex-1 text-xs px-2 py-1.5 rounded-lg outline-none"
-            style={{
-              background: "var(--color-surface-3)",
-              border: "1px solid var(--color-accent)",
-              color: "var(--color-text)",
-              fontFamily: "var(--font-mono)",
-            }}
+            placeholder="filename.ts" autoFocus
+            style={{ flex: 1, padding: "0.4rem 0.625rem", borderRadius: "0.5rem", fontSize: "0.8rem", background: "var(--color-surface-3)", border: "1px solid var(--color-accent)", color: "var(--color-text)", fontFamily: "var(--font-mono)", outline: "none" }}
           />
           <button
             onClick={createFile}
-            className="text-xs px-2 py-1.5 rounded-lg"
-            style={{ background: "var(--color-accent)", color: "#000" }}
+            style={{ padding: "0.4rem 0.75rem", borderRadius: "0.5rem", fontSize: "0.8rem", fontWeight: 600, background: "var(--color-accent)", color: "#000", border: "none", cursor: "pointer" }}
           >
             Create
           </button>
@@ -284,84 +169,53 @@ export function FileSidebar({ onFileSelect, activeFile }: FileSidebarProps) {
       )}
 
       {/* File list */}
-      <div className="flex-1 overflow-y-auto py-1">
+      <div style={{ flex: 1, overflowY: "auto", paddingTop: "0.25rem", paddingBottom: "0.25rem" }}>
         {loading ? (
-          <div className="px-3 py-6 text-center">
-            <p className="text-xs" style={{ color: "var(--color-text-3)" }}>
-              Loading...
-            </p>
+          <div style={{ padding: "2rem 1rem", textAlign: "center" }}>
+            <p style={{ color: "var(--color-text-3)", fontSize: "0.8rem" }}>Loading…</p>
           </div>
         ) : files.length === 0 ? (
-          <div className="px-3 py-6 text-center">
-            <p className="text-xs" style={{ color: "var(--color-text-3)" }}>
-              No files yet.
-            </p>
-            <p className="text-xs mt-1" style={{ color: "var(--color-text-3)" }}>
-              Clone a repo or create a file.
-            </p>
+          <div style={{ padding: "2rem 1rem", textAlign: "center" }}>
+            <p style={{ color: "var(--color-text-3)", fontSize: "0.8rem" }}>No files yet</p>
+            <p style={{ color: "var(--color-text-3)", fontSize: "0.75rem", marginTop: "0.25rem", lineHeight: 1.5 }}>Clone a repo or create a new file to get started.</p>
           </div>
         ) : (
           files.map((file) => (
             <button
               key={file.path}
               onClick={() => openFile(file)}
-              className="w-full flex items-center justify-between px-3 py-1.5 text-left group transition-colors"
               style={{
-                background:
-                  activeFile === file.path
-                    ? "var(--color-surface-3)"
-                    : "transparent",
-                borderLeft:
-                  activeFile === file.path
-                    ? "2px solid var(--color-accent)"
-                    : "2px solid transparent",
+                width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
+                padding: "0.375rem 0.625rem", textAlign: "left",
+                background: activeFile === file.path ? "var(--color-surface-3)" : "transparent",
+                borderTop: "none", borderRight: "none", borderBottom: "none",
+                borderLeft: `2px solid ${activeFile === file.path ? "var(--color-accent)" : "transparent"}`,
+                cursor: "pointer",
               }}
-              onMouseEnter={(e) => {
-                if (activeFile !== file.path)
-                  e.currentTarget.style.background = "var(--color-surface-2)";
-              }}
-              onMouseLeave={(e) => {
-                if (activeFile !== file.path)
-                  e.currentTarget.style.background = "transparent";
-              }}
+              className="file-row"
+              onMouseEnter={(e) => { if (activeFile !== file.path) e.currentTarget.style.background = "var(--color-surface-2)"; }}
+              onMouseLeave={(e) => { if (activeFile !== file.path) e.currentTarget.style.background = "transparent"; }}
             >
-              <div className="flex items-center gap-2 min-w-0">
-                {file.isDir ? (
-                  <IconFolder
-                    size={13}
-                    style={{ color: "var(--color-accent)", flexShrink: 0 } as React.CSSProperties}
-                  />
-                ) : (
-                  <IconFile
-                    size={13}
-                    style={{ color: "var(--color-text-3)", flexShrink: 0 } as React.CSSProperties}
-                  />
-                )}
-                <span
-                  className="text-xs truncate"
-                  style={{
-                    color:
-                      activeFile === file.path
-                        ? "var(--color-text)"
-                        : "var(--color-text-2)",
-                    fontFamily: "var(--font-mono)",
-                  }}
-                >
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", minWidth: 0 }}>
+                {file.isDir
+                  ? <IconFolder size={13} style={{ color: "var(--color-accent)", flexShrink: 0 } as React.CSSProperties} />
+                  : <IconFile size={13} style={{ color: "var(--color-text-3)", flexShrink: 0 } as React.CSSProperties} />
+                }
+                <span style={{
+                  color: activeFile === file.path ? "var(--color-text)" : "var(--color-text-2)",
+                  fontSize: "0.8rem", fontFamily: "var(--font-mono)",
+                  overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                }}>
                   {file.name}
                 </span>
               </div>
-
               {!file.isDir && (
                 <button
                   onClick={(e) => deleteFile(file, e)}
-                  className="opacity-0 group-hover:opacity-100 p-0.5 rounded transition-opacity"
-                  style={{ color: "var(--color-text-3)" }}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.color = "var(--color-error)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.color = "var(--color-text-3)")
-                  }
+                  style={{ padding: "0.125rem", borderRadius: "0.25rem", background: "transparent", border: "none", color: "var(--color-text-3)", cursor: "pointer", opacity: 0, flexShrink: 0 }}
+                  className="delete-btn"
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-error)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-text-3)")}
                 >
                   <IconTrash size={11} />
                 </button>
@@ -370,6 +224,8 @@ export function FileSidebar({ onFileSelect, activeFile }: FileSidebarProps) {
           ))
         )}
       </div>
+
+      <style>{`.file-row:hover .delete-btn { opacity: 1 !important; }`}</style>
     </div>
   );
 }

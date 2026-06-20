@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { IconHourly, IconClock } from "@/components/icons";
-import { MODELS } from "@/lib/models";
 
 interface WorkspaceHeaderProps {
   modelId: string;
@@ -116,23 +115,23 @@ export function WorkspaceHeader({
             cursor: "pointer",
           }}
         >
-          <option value="auto">Auto</option>
-          <optgroup label="Reasoning">
+          <option value="auto">Auto — Smart Routing</option>
+          <optgroup label="── Reasoning">
             <option value="deepseek-r1">DeepSeek R1</option>
             <option value="gemini-flash">Gemini 2.5 Flash</option>
           </optgroup>
-          <optgroup label="Coding">
+          <optgroup label="── Coding">
             <option value="qwen3-coder">Qwen3 Coder</option>
             <option value="codestral">Codestral 2508</option>
             <option value="deepseek-v3">DeepSeek V3</option>
           </optgroup>
-          <optgroup label="Debug">
+          <optgroup label="── Debug">
             <option value="kimi-k2">Kimi K2</option>
           </optgroup>
-          <optgroup label="Fast / Free">
+          <optgroup label="── Fast">
             <option value="deepseek-v4-flash">DeepSeek V4 Flash</option>
             <option value="gemini-flash-lite">Gemini Flash Lite</option>
-            <option value="llama4-scout">Llama 4 Scout</option>
+            <option value="llama4-scout">Llama 4 Scout (10M ctx)</option>
             <option value="qwen3-coder-free">Qwen3 Coder (Free)</option>
           </optgroup>
         </select>
