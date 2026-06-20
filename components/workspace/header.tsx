@@ -9,6 +9,7 @@ interface WorkspaceHeaderProps {
   modelId: string;
   onModelChange: (id: string) => void;
   expiresAt?: number;
+  tier?: string;
 }
 
 function formatDuration(ms: number): string {
@@ -24,7 +25,9 @@ export function WorkspaceHeader({
   modelId,
   onModelChange,
   expiresAt,
+  tier,
 }: WorkspaceHeaderProps) {
+  const isTrial = tier === "trial";
   const router = useRouter();
   const [remaining, setRemaining] = useState<number>(
     expiresAt ? expiresAt - Date.now() : 0
@@ -101,40 +104,65 @@ export function WorkspaceHeader({
           }}
         />
 
-        <select
-          value={modelId}
-          onChange={(e) => onModelChange(e.target.value)}
-          style={{
-            background: "var(--color-surface-3)",
-            border: "1px solid var(--color-border-2)",
-            color: "var(--color-text-2)",
-            borderRadius: "0.5rem",
-            padding: "0.25rem 0.5rem",
-            fontSize: "0.75rem",
-            outline: "none",
-            cursor: "pointer",
-          }}
-        >
-          <option value="auto">Auto — Smart Routing</option>
-          <optgroup label="── Reasoning">
-            <option value="deepseek-r1">DeepSeek R1</option>
-            <option value="gemini-flash">Gemini 2.5 Flash</option>
-          </optgroup>
-          <optgroup label="── Coding">
-            <option value="qwen3-coder">Qwen3 Coder</option>
-            <option value="codestral">Codestral 2508</option>
-            <option value="deepseek-v3">DeepSeek V3</option>
-          </optgroup>
-          <optgroup label="── Debug">
-            <option value="kimi-k2">Kimi K2</option>
-          </optgroup>
-          <optgroup label="── Fast">
-            <option value="deepseek-v4-flash">DeepSeek V4 Flash</option>
-            <option value="gemini-flash-lite">Gemini Flash Lite</option>
-            <option value="llama4-scout">Llama 4 Scout (10M ctx)</option>
-            <option value="qwen3-coder-free">Qwen3 Coder (Free)</option>
-          </optgroup>
-        </select>
+        {isTrial ? (
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <div style={{
+              background: "var(--color-surface-3)",
+              border: "1px solid var(--color-border-2)",
+              color: "var(--color-text-3)",
+              borderRadius: "0.5rem",
+              padding: "0.25rem 0.5rem",
+              fontSize: "0.75rem",
+              cursor: "default",
+            }}>
+              Qwen3 Coder (Free)
+            </div>
+            <span style={{
+              fontSize: "0.65rem", fontWeight: 700, fontFamily: "var(--font-mono)",
+              padding: "0.15rem 0.5rem", borderRadius: "9999px",
+              background: "rgba(255,170,0,0.12)", border: "1px solid rgba(255,170,0,0.35)",
+              color: "var(--color-warning)", textTransform: "uppercase", letterSpacing: "0.06em",
+              whiteSpace: "nowrap",
+            }}>
+              Trial
+            </span>
+          </div>
+        ) : (
+          <select
+            value={modelId}
+            onChange={(e) => onModelChange(e.target.value)}
+            style={{
+              background: "var(--color-surface-3)",
+              border: "1px solid var(--color-border-2)",
+              color: "var(--color-text-2)",
+              borderRadius: "0.5rem",
+              padding: "0.25rem 0.5rem",
+              fontSize: "0.75rem",
+              outline: "none",
+              cursor: "pointer",
+            }}
+          >
+            <option value="auto">Auto — Smart Routing</option>
+            <optgroup label="── Reasoning">
+              <option value="deepseek-r1">DeepSeek R1</option>
+              <option value="gemini-flash">Gemini 2.5 Flash</option>
+            </optgroup>
+            <optgroup label="── Coding">
+              <option value="qwen3-coder">Qwen3 Coder</option>
+              <option value="codestral">Codestral 2508</option>
+              <option value="deepseek-v3">DeepSeek V3</option>
+            </optgroup>
+            <optgroup label="── Debug">
+              <option value="kimi-k2">Kimi K2</option>
+            </optgroup>
+            <optgroup label="── Fast">
+              <option value="deepseek-v4-flash">DeepSeek V4 Flash</option>
+              <option value="gemini-flash-lite">Gemini Flash Lite</option>
+              <option value="llama4-scout">Llama 4 Scout (10M ctx)</option>
+              <option value="qwen3-coder-free">Qwen3 Coder (Free)</option>
+            </optgroup>
+          </select>
+        )}
       </div>
 
       {/* Center — session timer */}

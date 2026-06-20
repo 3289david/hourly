@@ -14,6 +14,7 @@ interface ChatPanelProps {
   modelId: string;
   onModelChange: (id: string) => void;
   fileContext?: string;
+  tier?: string;
 }
 
 const SUGGESTIONS = [
@@ -23,7 +24,8 @@ const SUGGESTIONS = [
   "Optimize this SQL query for performance",
 ];
 
-export function ChatPanel({ modelId, onModelChange, fileContext }: ChatPanelProps) {
+export function ChatPanel({ modelId, onModelChange, fileContext, tier }: ChatPanelProps) {
+  const isTrial = tier === "trial";
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [streaming, setStreaming] = useState(false);
@@ -249,41 +251,65 @@ export function ChatPanel({ modelId, onModelChange, fileContext }: ChatPanelProp
       <div style={{ padding: "0 1rem 1rem", flexShrink: 0 }}>
         {/* Model selector row */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.625rem", padding: "0 0.25rem" }}>
-          <select
-            value={modelId}
-            onChange={(e) => onModelChange(e.target.value)}
-            style={{
-              background: "var(--color-surface-3)",
-              border: "1px solid var(--color-border)",
-              color: "var(--color-text-2)",
-              borderRadius: "0.5rem",
-              padding: "0.375rem 0.625rem",
-              fontSize: "0.75rem",
-              outline: "none",
-              cursor: "pointer",
-              maxWidth: "260px",
-            }}
-          >
-            <option value="auto">Auto — Smart Route</option>
-            <optgroup label="Reasoning">
-              <option value="deepseek-r1">DeepSeek R1 · $0.50/1M</option>
-              <option value="gemini-flash">Gemini 2.5 Flash · 1M ctx</option>
-            </optgroup>
-            <optgroup label="Coding">
-              <option value="qwen3-coder">Qwen3 Coder · 1M ctx</option>
-              <option value="codestral">Codestral 2508</option>
-              <option value="deepseek-v3">DeepSeek V3</option>
-            </optgroup>
-            <optgroup label="Debug">
-              <option value="kimi-k2">Kimi K2</option>
-            </optgroup>
-            <optgroup label="Fast / Free">
-              <option value="deepseek-v4-flash">DeepSeek V4 Flash · 1M ctx</option>
-              <option value="gemini-flash-lite">Gemini Flash Lite</option>
-              <option value="llama4-scout">Llama 4 Scout · 10M ctx</option>
-              <option value="qwen3-coder-free">Qwen3 Coder (Free)</option>
-            </optgroup>
-          </select>
+          {isTrial ? (
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <span style={{
+                background: "var(--color-surface-3)",
+                border: "1px solid var(--color-border)",
+                color: "var(--color-text-3)",
+                borderRadius: "0.5rem",
+                padding: "0.375rem 0.625rem",
+                fontSize: "0.75rem",
+              }}>
+                Qwen3 Coder (Free)
+              </span>
+              <span style={{
+                fontSize: "0.65rem", fontWeight: 700, fontFamily: "var(--font-mono)",
+                padding: "0.15rem 0.5rem", borderRadius: "9999px",
+                background: "rgba(255,170,0,0.12)", border: "1px solid rgba(255,170,0,0.35)",
+                color: "var(--color-warning)", textTransform: "uppercase", letterSpacing: "0.06em",
+                whiteSpace: "nowrap",
+              }}>
+                Trial — free models only
+              </span>
+            </div>
+          ) : (
+            <select
+              value={modelId}
+              onChange={(e) => onModelChange(e.target.value)}
+              style={{
+                background: "var(--color-surface-3)",
+                border: "1px solid var(--color-border)",
+                color: "var(--color-text-2)",
+                borderRadius: "0.5rem",
+                padding: "0.375rem 0.625rem",
+                fontSize: "0.75rem",
+                outline: "none",
+                cursor: "pointer",
+                maxWidth: "260px",
+              }}
+            >
+              <option value="auto">Auto — Smart Routing</option>
+              <optgroup label="── Reasoning">
+                <option value="deepseek-r1">DeepSeek R1</option>
+                <option value="gemini-flash">Gemini 2.5 Flash</option>
+              </optgroup>
+              <optgroup label="── Coding">
+                <option value="qwen3-coder">Qwen3 Coder</option>
+                <option value="codestral">Codestral 2508</option>
+                <option value="deepseek-v3">DeepSeek V3</option>
+              </optgroup>
+              <optgroup label="── Debug">
+                <option value="kimi-k2">Kimi K2</option>
+              </optgroup>
+              <optgroup label="── Fast">
+                <option value="deepseek-v4-flash">DeepSeek V4 Flash</option>
+                <option value="gemini-flash-lite">Gemini Flash Lite</option>
+                <option value="llama4-scout">Llama 4 Scout (10M ctx)</option>
+                <option value="qwen3-coder-free">Qwen3 Coder (Free)</option>
+              </optgroup>
+            </select>
+          )}
 
           {messages.length > 0 && (
             <button

@@ -60,6 +60,7 @@ export default function WorkspacePage() {
         if (!res.ok) { router.replace("/activate"); return; }
         const data = (await res.json()) as SessionState;
         setSession(data);
+        if (data.tier === "trial") setModelId("qwen3-coder-free");
       } catch {
         router.replace("/activate");
       } finally {
@@ -110,7 +111,7 @@ export default function WorkspacePage() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh", width: "100vw", overflow: "hidden", background: "var(--color-bg)" }}>
-      <WorkspaceHeader modelId={modelId} onModelChange={setModelId} expiresAt={session.expiresAt} />
+      <WorkspaceHeader modelId={modelId} onModelChange={setModelId} expiresAt={session.expiresAt} tier={session.tier} />
 
       <div style={{ display: "flex", flex: 1, minHeight: 0 }}>
 
@@ -186,6 +187,7 @@ export default function WorkspacePage() {
                 modelId={modelId}
                 onModelChange={setModelId}
                 fileContext={activeFile && fileContent ? `File: ${activeFile}\n\`\`\`\n${fileContent.slice(0, 8000)}\n\`\`\`` : undefined}
+                tier={session.tier}
               />
             </div>
             <div style={{ position: "absolute", inset: 0, display: activeTab === "editor" ? "flex" : "none", flexDirection: "column" }}>
