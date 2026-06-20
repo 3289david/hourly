@@ -188,6 +188,7 @@ export function Hero() {
               fontFamily: "var(--font-mono)",
               fontSize: "14px",
               lineHeight: "2",
+              textAlign: "left",
             }}
           >
             {DEMO_LINES.slice(0, visibleLines).map((line, i) => (
