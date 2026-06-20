@@ -8,12 +8,21 @@ interface TerminalEntry {
   exitCode: number | null;
 }
 
+function formatCwd(cwd: string): string {
+  if (cwd === "/workspace" || cwd === "/workspace/") return "~/workspace";
+  if (cwd.startsWith("/workspace/")) return "~/" + cwd.slice("/workspace/".length);
+  if (cwd === "/home/sandbox") return "~";
+  if (cwd.startsWith("/home/sandbox/")) return "~/" + cwd.slice("/home/sandbox/".length);
+  return cwd;
+}
+
 export function TerminalPanel() {
   const [history, setHistory] = useState<TerminalEntry[]>([]);
   const [input, setInput] = useState("");
   const [running, setRunning] = useState(false);
   const [cmdHistory, setCmdHistory] = useState<string[]>([]);
   const [historyIdx, setHistoryIdx] = useState(-1);
+  const [cwd, setCwd] = useState("/workspace");
   const inputRef = useRef<HTMLInputElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -25,10 +34,11 @@ export function TerminalPanel() {
     if (!trimmed) return;
     setCmdHistory((prev) => [trimmed, ...prev]);
     setHistoryIdx(-1);
+    setInput("");
     setRunning(true);
 
     if (trimmed === "clear") {
-      setHistory([]); setInput(""); setRunning(false); return;
+      setHistory([]); setRunning(false); return;
     }
 
     try {
@@ -37,12 +47,16 @@ export function TerminalPanel() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ command: trimmed }),
       });
-      const data = (await res.json()) as { output?: string; error?: string; exitCode?: number };
-      setHistory((prev) => [...prev, { command: trimmed, output: data.output ?? data.error ?? "", exitCode: data.exitCode ?? (res.ok ? 0 : 1) }]);
+      const data = (await res.json()) as { output?: string; error?: string; exitCode?: number; cwd?: string };
+      if (data.cwd) setCwd(data.cwd);
+      setHistory((prev) => [
+        ...prev,
+        { command: trimmed, output: data.output ?? data.error ?? "", exitCode: data.exitCode ?? (res.ok ? 0 : 1) },
+      ]);
     } catch {
-      setHistory((prev) => [...prev, { command: trimmed, output: "Error: Failed to run command", exitCode: -1 }]);
+      setHistory((prev) => [...prev, { command: trimmed, output: "Network error", exitCode: -1 }]);
     } finally {
-      setInput(""); setRunning(false);
+      setRunning(false);
       setTimeout(() => inputRef.current?.focus(), 50);
     }
   }
@@ -62,6 +76,8 @@ export function TerminalPanel() {
     }
   }
 
+  const prompt = formatCwd(cwd);
+
   return (
     <div
       style={{ display: "flex", flexDirection: "column", height: "100%", background: "#08080e", fontFamily: "var(--font-mono)" }}
@@ -73,7 +89,7 @@ export function TerminalPanel() {
         <span style={{ width: "10px", height: "10px", borderRadius: "9999px", background: "#ffbd2e", display: "inline-block" }} />
         <span style={{ width: "10px", height: "10px", borderRadius: "9999px", background: "#28c840", display: "inline-block" }} />
         <span style={{ flex: 1 }} />
-        <span style={{ color: "var(--color-text-3)", fontSize: "0.75rem" }}>bash — workspace</span>
+        <span style={{ color: "var(--color-text-3)", fontSize: "0.75rem" }}>sandbox — isolated</span>
         <span style={{ flex: 1 }} />
       </div>
 
@@ -81,7 +97,8 @@ export function TerminalPanel() {
       <div style={{ flex: 1, overflowY: "auto", padding: "1rem 1.25rem", display: "flex", flexDirection: "column", gap: "0.75rem", fontSize: "0.8125rem", lineHeight: 1.6 }}>
         {history.length === 0 && (
           <div style={{ color: "var(--color-text-3)" }}>
-            <div style={{ color: "var(--color-accent)", marginBottom: "0.25rem" }}>Hourly workspace terminal</div>
+            <div style={{ color: "var(--color-accent)", marginBottom: "0.25rem" }}>Hourly sandbox terminal</div>
+            <div>Isolated environment — your code runs safely in a container.</div>
             <div>Type <span style={{ color: "var(--color-text-2)" }}>ls</span> to list files, <span style={{ color: "var(--color-text-2)" }}>clear</span> to clear screen.</div>
           </div>
         )}
@@ -89,7 +106,7 @@ export function TerminalPanel() {
         {history.map((entry, i) => (
           <div key={i}>
             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <span style={{ color: "var(--color-text-3)" }}>~/workspace</span>
+              <span style={{ color: "var(--color-text-3)" }}>{formatCwd(cwd)}</span>
               <span style={{ color: "var(--color-accent)" }}>$</span>
               <span style={{ color: "var(--color-text)" }}>{entry.command}</span>
             </div>
@@ -103,7 +120,7 @@ export function TerminalPanel() {
 
         {/* Input line */}
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-          <span style={{ color: "var(--color-text-3)" }}>~/workspace</span>
+          <span style={{ color: "var(--color-text-3)" }}>{prompt}</span>
           <span style={{ color: "var(--color-accent)" }}>$</span>
           <input
             ref={inputRef}
