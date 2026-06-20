@@ -9,78 +9,76 @@ export function Footer() {
       className="py-10"
       style={{ borderTop: "1px solid var(--color-border)" }}
     >
-      <div className="max-w-5xl mx-auto px-6">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-          <div>
-            <Link href="/" className="flex items-center gap-2 mb-2">
-              <IconHourly size={20} />
-              <span
-                className="text-sm font-semibold"
-                style={{ color: "var(--color-text)", fontFamily: "var(--font-mono)" }}
+      <div className="max-w-5xl mx-auto px-6 flex flex-col items-center text-center gap-8">
+        <div className="flex flex-col items-center gap-2">
+          <Link href="/" className="flex items-center gap-2">
+            <IconHourly size={20} />
+            <span
+              className="text-sm font-semibold"
+              style={{ color: "var(--color-text)", fontFamily: "var(--font-mono)" }}
+            >
+              Hourly
+            </span>
+          </Link>
+          <p className="text-xs" style={{ color: "var(--color-text-3)" }}>
+            Hire AI by the hour.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap justify-center gap-10">
+          <div className="flex flex-col items-center gap-2">
+            <div
+              className="text-xs font-semibold uppercase tracking-wider mb-1"
+              style={{ color: "var(--color-text-3)" }}
+            >
+              Product
+            </div>
+            {[
+              { label: "Features", href: "/#features" },
+              { label: "Pricing", href: "/#pricing" },
+              { label: "FAQ", href: "/#faq" },
+              { label: "Activate Key", href: "/activate" },
+            ].map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="text-xs transition-colors"
+                style={{ color: "var(--color-text-2)" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-text)")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-text-2)")}
               >
-                Hourly
-              </span>
-            </Link>
-            <p className="text-xs" style={{ color: "var(--color-text-3)" }}>
-              Hire AI by the hour.
-            </p>
+                {link.label}
+              </Link>
+            ))}
           </div>
 
-          <div className="flex flex-wrap gap-10">
-            <div className="flex flex-col gap-2">
-              <div
-                className="text-xs font-semibold uppercase tracking-wider mb-1"
-                style={{ color: "var(--color-text-3)" }}
-              >
-                Product
-              </div>
-              {[
-                { label: "Features", href: "/#features" },
-                { label: "Pricing", href: "/#pricing" },
-                { label: "FAQ", href: "/#faq" },
-                { label: "Activate Key", href: "/activate" },
-              ].map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="text-xs transition-colors"
-                  style={{ color: "var(--color-text-2)" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-text)")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-text-2)")}
-                >
-                  {link.label}
-                </Link>
-              ))}
+          <div className="flex flex-col items-center gap-2">
+            <div
+              className="text-xs font-semibold uppercase tracking-wider mb-1"
+              style={{ color: "var(--color-text-3)" }}
+            >
+              Legal
             </div>
-
-            <div className="flex flex-col gap-2">
-              <div
-                className="text-xs font-semibold uppercase tracking-wider mb-1"
-                style={{ color: "var(--color-text-3)" }}
+            {[
+              { label: "Privacy Policy", href: "/privacy" },
+              { label: "Terms of Service", href: "/terms" },
+            ].map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="text-xs transition-colors"
+                style={{ color: "var(--color-text-2)" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-text)")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-text-2)")}
               >
-                Legal
-              </div>
-              {[
-                { label: "Privacy Policy", href: "/privacy" },
-                { label: "Terms of Service", href: "/terms" },
-              ].map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="text-xs transition-colors"
-                  style={{ color: "var(--color-text-2)" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-text)")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-text-2)")}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
+                {link.label}
+              </Link>
+            ))}
           </div>
         </div>
 
         <div
-          className="mt-8 pt-6 flex flex-col md:flex-row items-center justify-between gap-3"
+          className="w-full pt-6 flex flex-col items-center gap-3"
           style={{ borderTop: "1px solid var(--color-border)" }}
         >
           <p className="text-xs" style={{ color: "var(--color-text-3)" }}>

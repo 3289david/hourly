@@ -70,12 +70,12 @@ export function FAQ() {
               }}
             >
               <button
-                className="w-full text-left flex items-center justify-between px-4 py-3 gap-4"
+                className="w-full flex items-center px-4 py-3 gap-4"
                 onClick={() => setOpen(open === i ? null : i)}
                 aria-expanded={open === i}
               >
                 <span
-                  className="text-sm font-medium"
+                  className="flex-1 text-center text-sm font-medium"
                   style={{ color: "var(--color-text)" }}
                 >
                   {faq.q}
@@ -93,7 +93,7 @@ export function FAQ() {
 
               {open === i && (
                 <div
-                  className="px-4 pb-3 text-xs leading-relaxed"
+                  className="px-4 pb-3 text-sm leading-relaxed text-center"
                   style={{ color: "var(--color-text-2)" }}
                 >
                   {faq.a}
