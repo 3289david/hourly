@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useState } from "react";
-
 import { IconHourly } from "./icons";
 
 export function Nav() {
@@ -11,70 +10,65 @@ export function Nav() {
   return (
     <nav
       className="fixed top-0 left-0 right-0 z-50 border-b"
-      style={{
-        background: "rgba(6,6,10,0.90)",
-        backdropFilter: "blur(16px)",
-        borderColor: "var(--color-border)",
-      }}
+      style={{ background: "rgba(6,6,10,0.90)", backdropFilter: "blur(16px)", borderColor: "var(--color-border)" }}
     >
-      <div className="max-w-6xl mx-auto px-6 h-16 grid items-center" style={{ gridTemplateColumns: "1fr auto 1fr" }}>
-        {/* Left: Logo */}
-        <Link href="/" className="flex items-center gap-2">
+      {/* Desktop: everything centered in one row */}
+      <div
+        className="hidden md:flex items-center justify-center gap-8 px-6"
+        style={{ height: "4rem" }}
+      >
+        <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none" }}>
           <IconHourly size={24} />
-          <span
-            className="text-base font-semibold"
-            style={{ color: "var(--color-text)", fontFamily: "var(--font-mono)" }}
-          >
+          <span style={{ color: "var(--color-text)", fontFamily: "var(--font-mono)", fontSize: "1rem", fontWeight: 600 }}>
             Hourly
           </span>
         </Link>
 
-        {/* Center links */}
-        <div className="hidden md:flex items-center gap-8">
-          {[
-            { label: "Features", href: "/#features" },
-            { label: "Pricing", href: "/#pricing" },
-            { label: "FAQ", href: "/#faq" },
-          ].map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-sm transition-colors"
-              style={{ color: "var(--color-text-2)" }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-text)")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-text-2)")}
-            >
-              {link.label}
-            </a>
-          ))}
-        </div>
-
-        {/* Right: Activate + CTA */}
-        <div className="hidden md:flex items-center gap-3 justify-end">
-          <Link
-            href="/activate"
-            className="text-sm px-4 py-2 rounded-lg transition-colors"
-            style={{ color: "var(--color-text-2)" }}
+        {[
+          { label: "Features", href: "/#features" },
+          { label: "Pricing", href: "/#pricing" },
+          { label: "FAQ", href: "/#faq" },
+        ].map((link) => (
+          <a
+            key={link.href}
+            href={link.href}
+            style={{ color: "var(--color-text-2)", fontSize: "0.875rem", textDecoration: "none" }}
             onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-text)")}
             onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-text-2)")}
           >
-            Activate Key
-          </Link>
-          <Link
-            href="/#pricing"
-            className="text-sm px-4 py-2 rounded-lg font-medium transition-all"
-            style={{ background: "var(--color-accent)", color: "#000" }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = "var(--color-accent-hover)")}
-            onMouseLeave={(e) => (e.currentTarget.style.background = "var(--color-accent)")}
-          >
-            Get Started
-          </Link>
-        </div>
+            {link.label}
+          </a>
+        ))}
 
-        {/* Mobile hamburger */}
+        <Link
+          href="/activate"
+          style={{ color: "var(--color-text-2)", fontSize: "0.875rem", padding: "0.5rem 1rem", borderRadius: "0.5rem", textDecoration: "none" }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-text)")}
+          onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-text-2)")}
+        >
+          Activate Key
+        </Link>
+
+        <Link
+          href="/#pricing"
+          style={{ background: "var(--color-accent)", color: "#000", fontSize: "0.875rem", fontWeight: 600, padding: "0.5rem 1rem", borderRadius: "0.5rem", textDecoration: "none" }}
+          onMouseEnter={(e) => (e.currentTarget.style.background = "var(--color-accent-hover)")}
+          onMouseLeave={(e) => (e.currentTarget.style.background = "var(--color-accent)")}
+        >
+          Get Started
+        </Link>
+      </div>
+
+      {/* Mobile: logo + hamburger row */}
+      <div className="md:hidden flex items-center justify-center px-6" style={{ height: "4rem", position: "relative" }}>
+        <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none" }}>
+          <IconHourly size={22} />
+          <span style={{ color: "var(--color-text)", fontFamily: "var(--font-mono)", fontSize: "0.875rem", fontWeight: 600 }}>
+            Hourly
+          </span>
+        </Link>
         <button
-          className="md:hidden p-2 justify-self-end"
-          style={{ color: "var(--color-text-2)" }}
+          style={{ position: "absolute", right: "1.5rem", color: "var(--color-text-2)", background: "none", border: "none", cursor: "pointer", padding: "0.25rem" }}
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
         >
@@ -95,11 +89,11 @@ export function Nav() {
         </button>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile dropdown — centered */}
       {mobileOpen && (
         <div
-          className="md:hidden py-5 flex flex-col items-center gap-4"
-          style={{ borderTop: "1px solid var(--color-border)" }}
+          className="md:hidden flex flex-col items-center gap-4 py-5"
+          style={{ borderTop: "1px solid var(--color-border)", textAlign: "center" }}
         >
           {[
             { label: "Features", href: "/#features" },
@@ -107,20 +101,13 @@ export function Nav() {
             { label: "FAQ", href: "/#faq" },
             { label: "Activate Key", href: "/activate" },
           ].map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-base"
-              style={{ color: "var(--color-text-2)" }}
-              onClick={() => setMobileOpen(false)}
-            >
+            <a key={link.href} href={link.href} style={{ color: "var(--color-text-2)", fontSize: "1rem", textDecoration: "none" }} onClick={() => setMobileOpen(false)}>
               {link.label}
             </a>
           ))}
           <Link
             href="/#pricing"
-            className="mt-1 text-base px-6 py-2.5 rounded-lg font-medium"
-            style={{ background: "var(--color-accent)", color: "#000" }}
+            style={{ background: "var(--color-accent)", color: "#000", fontSize: "1rem", fontWeight: 600, padding: "0.625rem 1.5rem", borderRadius: "0.5rem", textDecoration: "none" }}
             onClick={() => setMobileOpen(false)}
           >
             Get Started
