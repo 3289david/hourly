@@ -40,18 +40,21 @@ export function Hero() {
   }, []);
 
   return (
-    <section className="relative flex flex-col items-center pt-16 overflow-hidden">
+    <section className="relative flex flex-col items-center">
+      {/* Grid background */}
       <div className="absolute inset-0 grid-bg opacity-20" aria-hidden />
+      {/* Top glow */}
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] pointer-events-none"
         style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(0,212,255,0.10) 0%, transparent 70%)" }}
         aria-hidden
       />
 
-      <div className="relative w-full max-w-4xl mx-auto px-6 pt-28 pb-16 flex flex-col items-center text-center">
+      {/* Main content — centered */}
+      <div className="relative w-full max-w-4xl mx-auto px-6 pt-20 pb-16 flex flex-col items-center text-center">
         {/* Badge */}
         <div
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-10"
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-8"
           style={{
             background: "var(--color-accent-dim)",
             border: "1px solid rgba(0,212,255,0.2)",
@@ -65,7 +68,7 @@ export function Hero() {
 
         {/* Headline */}
         <h1
-          className="text-5xl md:text-7xl font-bold tracking-tight mb-6 leading-[1.06]"
+          className="text-5xl md:text-7xl font-bold tracking-tight mb-6 leading-[1.06] text-center w-full"
           style={{ color: "var(--color-text)" }}
         >
           Hire AI
@@ -84,7 +87,7 @@ export function Hero() {
 
         {/* Subtext */}
         <p
-          className="text-lg md:text-xl mb-10 max-w-2xl"
+          className="text-lg md:text-xl mb-10 max-w-2xl text-center"
           style={{ color: "var(--color-text-2)", lineHeight: "1.7" }}
         >
           Unlimited AI coding agent — no subscription. Buy an hour, use it hard.
@@ -92,7 +95,7 @@ export function Hero() {
         </p>
 
         {/* CTAs */}
-        <div className="flex flex-col sm:flex-row items-center gap-4 mb-14">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14 w-full">
           <a
             href="#pricing"
             className="flex items-center gap-2 px-7 py-3.5 rounded-lg font-semibold text-base transition-all"
@@ -128,7 +131,7 @@ export function Hero() {
 
         {/* Stats */}
         <div
-          className="flex items-center gap-12 pt-8 w-full justify-center"
+          className="flex items-center justify-center gap-12 pt-8 w-full"
           style={{ borderTop: "1px solid var(--color-border)" }}
         >
           {[
