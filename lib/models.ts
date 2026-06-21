@@ -189,7 +189,7 @@ export function routeModel(prompt: string): string {
       return modelId;
     }
   }
-  return "deepseek-r1";
+  return "qwen3-coder";
 }
 
 export function getModelById(id: string): AIModel {
