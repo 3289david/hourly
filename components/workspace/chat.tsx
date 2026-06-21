@@ -27,6 +27,7 @@ interface ChatPanelProps {
   onModelChange: (id: string) => void;
   fileContext?: string;
   tier?: string;
+  onFilesChanged?: () => void;
 }
 
 const SUGGESTIONS = [
@@ -123,7 +124,7 @@ function ToolBlock({ block }: { block: ToolBlock }) {
   const [expanded, setExpanded] = useState(true);
   const meta = TOOL_META[block.name] ?? { label: block.name, color: "#888", bg: "rgba(128,128,128,0.06)", border: "rgba(128,128,128,0.2)" };
   const preview = toolInputPreview(block.name, block.input);
-  const isWrite = block.name === "write_file" || block.name === "write_many_files" || block.name === "replace_in_file";
+  const isWrite = FILE_WRITE_TOOLS.has(block.name);
 
   return (
     <div style={{ margin: "0.375rem 0", borderRadius: "0.625rem", overflow: "hidden", border: `1px solid ${block.error ? "rgba(248,113,113,0.35)" : meta.border}`, background: block.error ? "rgba(248,113,113,0.04)" : meta.bg }}>
@@ -167,9 +168,7 @@ function ToolBlock({ block }: { block: ToolBlock }) {
             whiteSpace: "pre-wrap",
             wordBreak: "break-word",
           }}>
-            {isWrite
-              ? `// ${block.input.path}\n${block.output}`
-              : (block.output || "(no output)")}
+            {block.output || "(no output)"}
           </pre>
         </div>
       )}
@@ -179,7 +178,9 @@ function ToolBlock({ block }: { block: ToolBlock }) {
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export function ChatPanel({ modelId, onModelChange, fileContext, tier }: ChatPanelProps) {
+const FILE_WRITE_TOOLS = new Set(["write_file", "write_many_files", "replace_in_file", "append_to_file", "delete_file", "move_file", "create_directory"]);
+
+export function ChatPanel({ modelId, onModelChange, fileContext, tier, onFilesChanged }: ChatPanelProps) {
   const isTrial = tier === "trial";
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -293,12 +294,16 @@ export function ChatPanel({ modelId, onModelChange, fileContext, tier }: ChatPan
                 case "tool_result": {
                   const idx = blocks.findLastIndex((b) => b.type === "tool" && b.id === event.id);
                   if (idx >= 0) {
+                    const toolName = (blocks[idx] as ToolBlock).name;
                     blocks[idx] = {
                       ...(blocks[idx] as ToolBlock),
                       output: event.output ?? "",
                       error: !!event.error,
                       running: false,
                     };
+                    if (!event.error && FILE_WRITE_TOOLS.has(toolName)) {
+                      onFilesChanged?.();
+                    }
                   }
                   break;
                 }

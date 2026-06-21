@@ -13,9 +13,10 @@ interface FileSidebarProps {
   onFileSelect: (path: string, content: string) => void;
   onFileSave: (path: string, content: string) => void;
   activeFile?: string;
+  refreshKey?: number;
 }
 
-export function FileSidebar({ onFileSelect, activeFile }: FileSidebarProps) {
+export function FileSidebar({ onFileSelect, activeFile, refreshKey }: FileSidebarProps) {
   const [files, setFiles] = useState<FileEntry[]>([]);
   const [currentPath, setCurrentPath] = useState("");
   const [loading, setLoading] = useState(true);
@@ -41,7 +42,8 @@ export function FileSidebar({ onFileSelect, activeFile }: FileSidebarProps) {
     }
   }, []);
 
-  useEffect(() => { loadFiles(); }, [loadFiles]);
+  useEffect(() => { loadFiles(currentPath); }, [loadFiles]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (refreshKey !== undefined) loadFiles(currentPath); }, [refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function goUp() {
     const parts = currentPath.split("/").filter(Boolean);

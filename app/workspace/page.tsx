@@ -52,6 +52,7 @@ export default function WorkspacePage() {
   const [activeFile, setActiveFile] = useState<string | undefined>();
   const [fileContent, setFileContent] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [filesVersion, setFilesVersion] = useState(0);
 
   useEffect(() => {
     async function checkSession() {
@@ -118,7 +119,7 @@ export default function WorkspacePage() {
         {/* File sidebar */}
         {sidebarOpen && (
           <div style={{ width: "220px", flexShrink: 0, minHeight: 0 }}>
-            <FileSidebar onFileSelect={handleFileSelect} onFileSave={handleFileSave} activeFile={activeFile} />
+            <FileSidebar onFileSelect={handleFileSelect} onFileSave={handleFileSave} activeFile={activeFile} refreshKey={filesVersion} />
           </div>
         )}
 
@@ -188,6 +189,7 @@ export default function WorkspacePage() {
                 onModelChange={setModelId}
                 fileContext={activeFile && fileContent ? `File: ${activeFile}\n\`\`\`\n${fileContent.slice(0, 8000)}\n\`\`\`` : undefined}
                 tier={session.tier}
+                onFilesChanged={() => setFilesVersion((v) => v + 1)}
               />
             </div>
             <div style={{ position: "absolute", inset: 0, display: activeTab === "editor" ? "flex" : "none", flexDirection: "column" }}>
