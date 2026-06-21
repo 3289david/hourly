@@ -34,7 +34,7 @@ export default function ActivatePage() {
   const [loading, setLoading] = useState(false);
   const [trialLoading, setTrialLoading] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState<{ tier: string; expiresAt: number; extended?: boolean } | null>(null);
+  const [success, setSuccess] = useState<{ tier: string; expiresAt: number; extended?: boolean; restored?: boolean } | null>(null);
   const [existingSession, setExistingSession] = useState<{ tier: string; expiresAt: number } | null>(null);
   const [checkingSession, setCheckingSession] = useState(true);
 
@@ -62,9 +62,11 @@ export default function ActivatePage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ key: key.trim(), byokKey: byokKey.trim() || undefined }),
       });
-      const data = (await res.json()) as { ok?: boolean; error?: string; tier?: string; expiresAt?: number };
+      const data = (await res.json()) as { ok?: boolean; error?: string; tier?: string; expiresAt?: number; sessionId?: string };
       if (!res.ok || !data.ok) { setError(data.error ?? "Activation failed"); return; }
-      setSuccess({ tier: data.tier!, expiresAt: data.expiresAt!, extended: isExtending });
+      // Detect restore: same key used again — API returns the stored sessionId
+      const isRestored = !isExtending && !!data.sessionId;
+      setSuccess({ tier: data.tier!, expiresAt: data.expiresAt!, extended: isExtending, restored: isRestored && !isExtending });
       setTimeout(() => router.push("/workspace"), 1500);
     } catch {
       setError("Network error — please try again");
@@ -110,14 +112,14 @@ export default function ActivatePage() {
                 <IconCheck size={24} style={{ color: "var(--color-success)" } as React.CSSProperties} />
               </div>
               <h2 style={{ color: "var(--color-text)", fontSize: "1.25rem", fontWeight: 700, marginBottom: "0.5rem" }}>
-                {success.extended ? "Session extended!" : success.tier === "trial" ? "Trial started!" : "Session activated!"}
+                {success.restored ? "Session restored!" : success.extended ? "Session extended!" : success.tier === "trial" ? "Trial started!" : "Session activated!"}
               </h2>
               <p style={{ color: "var(--color-text-2)", fontSize: "0.875rem", marginBottom: "0.25rem" }}>
-                {TIER_LABELS[success.tier] ?? success.tier} of {success.tier === "trial" ? "free" : "unlimited"} access
+                {success.restored ? "Your workspace and remaining time have been restored." : `${TIER_LABELS[success.tier] ?? success.tier} of ${success.tier === "trial" ? "free" : "unlimited"} access`}
               </p>
-              {success.extended && (
+              {(success.extended || success.restored) && (
                 <p style={{ color: "var(--color-text-3)", fontSize: "0.75rem", marginBottom: "0.25rem" }}>
-                  New expiry: {new Date(success.expiresAt).toLocaleString()}
+                  Expires: {new Date(success.expiresAt).toLocaleString()}
                 </p>
               )}
               <p style={{ color: "var(--color-accent)", fontSize: "0.75rem", marginTop: "1rem" }}>

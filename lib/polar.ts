@@ -1,5 +1,3 @@
-import { isKeyUsed, claimKey } from "@/lib/key-store";
-
 export type PolarTier = "1h" | "6h" | "24h" | "7d" | "30d";
 
 export interface ValidatedLicense {
@@ -47,13 +45,6 @@ export async function validatePolarLicense(
   const organizationId = process.env.POLAR_ORGANIZATION_ID;
 
   if (!accessToken) throw new Error("Polar access token not configured");
-
-  // Fast-path: reject immediately if we've already issued a session for this key
-  if (await isKeyUsed(key)) {
-    throw new Error(
-      "This license key has already been activated. Each key can only be used once — purchase a new key at hourly.krl.kr/pricing to add more time."
-    );
-  }
 
   // Step 1: validate the license key
   const validateRes = await fetch(`${POLAR_BASE}/license-keys/validate`, {
@@ -121,15 +112,7 @@ export async function validatePolarLicense(
     throw new Error("Unrecognized product — contact support");
   }
 
-  // Step 3: atomically claim key in our store — prevents reuse even if Polar has no limit_usage
-  const claimed = await claimKey(key);
-  if (!claimed) {
-    throw new Error(
-      "This license key has already been activated. Each key can only be used once — purchase a new key at hourly.krl.kr/pricing to add more time."
-    );
-  }
-
-  // Step 4: tell Polar to mark the key as used (for their records; non-fatal)
+  // Step 3: tell Polar to mark the key as used (for their records; non-fatal)
   fetch(`${POLAR_BASE}/license-keys/activate`, {
     method: "POST",
     headers: {

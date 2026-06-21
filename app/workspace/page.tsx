@@ -71,6 +71,16 @@ export default function WorkspacePage() {
     checkSession();
   }, [router]);
 
+  // Heartbeat: keep this session marked as "active" so another device can't
+  // steal it. Ping every 60s — after 3 missed pings (3 min) the session
+  // becomes available to restore from another device.
+  useEffect(() => {
+    const ping = () => fetch("/api/ping", { method: "POST" }).catch(() => {});
+    ping(); // immediate ping on mount
+    const id = setInterval(ping, 60_000);
+    return () => clearInterval(id);
+  }, []);
+
   async function handleFileSave(path: string, content: string) {
     await fetch("/api/files", {
       method: "POST",
