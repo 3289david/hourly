@@ -17,6 +17,7 @@ interface FileSidebarProps {
 
 export function FileSidebar({ onFileSelect, activeFile }: FileSidebarProps) {
   const [files, setFiles] = useState<FileEntry[]>([]);
+  const [currentPath, setCurrentPath] = useState("");
   const [loading, setLoading] = useState(true);
   const [showClone, setShowClone] = useState(false);
   const [repoUrl, setRepoUrl] = useState("");
@@ -32,6 +33,7 @@ export function FileSidebar({ onFileSelect, activeFile }: FileSidebarProps) {
       const res = await fetch(`/api/files?path=${encodeURIComponent(subPath)}`);
       const data = (await res.json()) as { files?: FileEntry[]; error?: string };
       setFiles(data.files ?? []);
+      setCurrentPath(subPath);
     } catch {
       setFiles([]);
     } finally {
@@ -40,6 +42,12 @@ export function FileSidebar({ onFileSelect, activeFile }: FileSidebarProps) {
   }, []);
 
   useEffect(() => { loadFiles(); }, [loadFiles]);
+
+  function goUp() {
+    const parts = currentPath.split("/").filter(Boolean);
+    parts.pop();
+    loadFiles(parts.join("/"));
+  }
 
   async function openFile(file: FileEntry) {
     if (file.isDir) { loadFiles(file.path); return; }
@@ -174,13 +182,26 @@ export function FileSidebar({ onFileSelect, activeFile }: FileSidebarProps) {
           <div style={{ padding: "2rem 1rem", textAlign: "center" }}>
             <p style={{ color: "var(--color-text-3)", fontSize: "0.8rem" }}>Loading…</p>
           </div>
-        ) : files.length === 0 ? (
-          <div style={{ padding: "2rem 1rem", textAlign: "center" }}>
-            <p style={{ color: "var(--color-text-3)", fontSize: "0.8rem" }}>No files yet</p>
-            <p style={{ color: "var(--color-text-3)", fontSize: "0.75rem", marginTop: "0.25rem", lineHeight: 1.5 }}>Clone a repo or create a new file to get started.</p>
-          </div>
         ) : (
-          files.map((file) => (
+          <>
+            {/* Parent directory row */}
+            {currentPath && (
+              <button
+                onClick={goUp}
+                style={{ width: "100%", display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.375rem 0.625rem", textAlign: "left", background: "transparent", border: "none", borderLeft: "2px solid transparent", cursor: "pointer", color: "var(--color-text-3)" }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "var(--color-surface-2)"; e.currentTarget.style.color = "var(--color-text-2)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--color-text-3)"; }}
+              >
+                <span style={{ fontSize: "0.8rem", fontFamily: "var(--font-mono)" }}>↑ ..</span>
+              </button>
+            )}
+            {files.length === 0 && !currentPath && (
+              <div style={{ padding: "2rem 1rem", textAlign: "center" }}>
+                <p style={{ color: "var(--color-text-3)", fontSize: "0.8rem" }}>No files yet</p>
+                <p style={{ color: "var(--color-text-3)", fontSize: "0.75rem", marginTop: "0.25rem", lineHeight: 1.5 }}>Clone a repo or create a new file to get started.</p>
+              </div>
+            )}
+          {files.map((file) => (
             <button
               key={file.path}
               onClick={() => openFile(file)}
@@ -221,7 +242,8 @@ export function FileSidebar({ onFileSelect, activeFile }: FileSidebarProps) {
                 </button>
               )}
             </button>
-          ))
+          ))}
+          </>
         )}
       </div>
 
