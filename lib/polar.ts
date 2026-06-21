@@ -75,14 +75,14 @@ export async function validatePolarLicense(
 
   if (licenseData.status !== "granted" && licenseData.status !== "active") {
     throw new Error(
-      `This license key is ${licenseData.status === "revoked" ? "revoked" : "inactive"}. Each key can only be used once — purchase a new key at hourly.dev/pricing.`
+      `This license key is ${licenseData.status === "revoked" ? "revoked" : "inactive"}. Each key can only be used once — purchase a new key at hourly.krl.kr/pricing.`
     );
   }
 
   // Reject if usage is at or over limit (key already activated)
   if (licenseData.limit_usage !== null && licenseData.usage >= licenseData.limit_usage) {
     throw new Error(
-      "This license key has already been activated. Each key can only be used once — purchase a new key at hourly.dev/pricing to add more time."
+      "This license key has already been activated. Each key can only be used once — purchase a new key at hourly.krl.kr/pricing to add more time."
     );
   }
 
