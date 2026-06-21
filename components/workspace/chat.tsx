@@ -11,7 +11,7 @@ type ToolBlock = {
   type: "tool";
   id: string;
   name: string;
-  input: Record<string, string>;
+  input: Record<string, unknown>;
   output?: string;
   error?: boolean;
   running: boolean;
@@ -39,21 +39,39 @@ const SUGGESTIONS = [
 // ── Tool config ───────────────────────────────────────────────────────────────
 
 const TOOL_META: Record<string, { label: string; color: string; bg: string; border: string }> = {
-  run_terminal: { label: "Terminal",   color: "#00d4ff", bg: "rgba(0,212,255,0.06)",    border: "rgba(0,212,255,0.2)" },
-  read_file:    { label: "Read file",  color: "#a78bfa", bg: "rgba(167,139,250,0.06)", border: "rgba(167,139,250,0.2)" },
-  write_file:   { label: "Write file", color: "#34d399", bg: "rgba(52,211,153,0.06)",  border: "rgba(52,211,153,0.2)" },
-  list_files:   { label: "List files", color: "#fbbf24", bg: "rgba(251,191,36,0.06)",  border: "rgba(251,191,36,0.2)" },
-  delete_file:  { label: "Delete",     color: "#f87171", bg: "rgba(248,113,113,0.06)", border: "rgba(248,113,113,0.2)" },
+  run_terminal:    { label: "Terminal",    color: "#00d4ff", bg: "rgba(0,212,255,0.06)",    border: "rgba(0,212,255,0.2)" },
+  read_file:       { label: "Read",        color: "#a78bfa", bg: "rgba(167,139,250,0.06)", border: "rgba(167,139,250,0.2)" },
+  write_file:      { label: "Write",       color: "#34d399", bg: "rgba(52,211,153,0.06)",  border: "rgba(52,211,153,0.2)" },
+  write_many_files:{ label: "Scaffold",    color: "#34d399", bg: "rgba(52,211,153,0.06)",  border: "rgba(52,211,153,0.2)" },
+  replace_in_file: { label: "Edit",        color: "#34d399", bg: "rgba(52,211,153,0.06)",  border: "rgba(52,211,153,0.2)" },
+  append_to_file:  { label: "Append",      color: "#34d399", bg: "rgba(52,211,153,0.06)",  border: "rgba(52,211,153,0.2)" },
+  list_files:      { label: "List",        color: "#fbbf24", bg: "rgba(251,191,36,0.06)",  border: "rgba(251,191,36,0.2)" },
+  delete_file:     { label: "Delete",      color: "#f87171", bg: "rgba(248,113,113,0.06)", border: "rgba(248,113,113,0.2)" },
+  move_file:       { label: "Move",        color: "#a78bfa", bg: "rgba(167,139,250,0.06)", border: "rgba(167,139,250,0.2)" },
+  create_directory:{ label: "Mkdir",       color: "#fbbf24", bg: "rgba(251,191,36,0.06)",  border: "rgba(251,191,36,0.2)" },
+  search_in_files: { label: "Search",      color: "#fb923c", bg: "rgba(251,146,60,0.06)",  border: "rgba(251,146,60,0.2)" },
+  fetch_url:       { label: "Fetch URL",   color: "#60a5fa", bg: "rgba(96,165,250,0.06)",  border: "rgba(96,165,250,0.2)" },
 };
 
-function toolInputPreview(name: string, input: Record<string, string>): string {
+function toolInputPreview(name: string, input: Record<string, unknown>): string {
+  const s = (k: string) => (input[k] as string) ?? "";
   switch (name) {
-    case "run_terminal": return `$ ${input.command ?? ""}`;
-    case "read_file":    return input.path ?? "";
-    case "write_file":   return input.path ?? "";
-    case "list_files":   return input.path ? input.path : "/";
-    case "delete_file":  return input.path ?? "";
-    default:             return JSON.stringify(input);
+    case "run_terminal":     return `$ ${s("command")}`;
+    case "read_file":        return s("path");
+    case "write_file":       return s("path");
+    case "append_to_file":   return s("path");
+    case "replace_in_file":  return s("path");
+    case "list_files":       return s("path") || "/";
+    case "delete_file":      return s("path");
+    case "create_directory": return s("path");
+    case "move_file":        return `${s("from")} → ${s("to")}`;
+    case "search_in_files":  return `"${s("pattern")}"${s("path") ? ` in ${s("path")}` : ""}${s("file_glob") ? ` [${s("file_glob")}]` : ""}`;
+    case "fetch_url":        return s("url");
+    case "write_many_files": {
+      const files = (input.files as Array<{ path: string }>) ?? [];
+      return `${files.length} file${files.length !== 1 ? "s" : ""}`;
+    }
+    default: return JSON.stringify(input).slice(0, 80);
   }
 }
 
@@ -105,8 +123,7 @@ function ToolBlock({ block }: { block: ToolBlock }) {
   const [expanded, setExpanded] = useState(true);
   const meta = TOOL_META[block.name] ?? { label: block.name, color: "#888", bg: "rgba(128,128,128,0.06)", border: "rgba(128,128,128,0.2)" };
   const preview = toolInputPreview(block.name, block.input);
-  const isTerminal = block.name === "run_terminal";
-  const isWrite = block.name === "write_file";
+  const isWrite = block.name === "write_file" || block.name === "write_many_files" || block.name === "replace_in_file";
 
   return (
     <div style={{ margin: "0.375rem 0", borderRadius: "0.625rem", overflow: "hidden", border: `1px solid ${block.error ? "rgba(248,113,113,0.35)" : meta.border}`, background: block.error ? "rgba(248,113,113,0.04)" : meta.bg }}>
@@ -240,7 +257,7 @@ export function ChatPanel({ modelId, onModelChange, fileContext, tier }: ChatPan
               content?: string;
               id?: string;
               name?: string;
-              input?: Record<string, string>;
+              input?: Record<string, unknown>;
               output?: string;
               error?: boolean | string;
               model?: string;
