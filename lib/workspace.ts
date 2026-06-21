@@ -1,8 +1,51 @@
 import fs from "fs/promises";
 import path from "path";
+import * as prettier from "prettier";
 
 const WORKSPACE_ROOT =
   process.env.WORKSPACE_ROOT ?? "/tmp/hourly-workspaces";
+
+const PRETTIER_PARSERS: Record<string, string> = {
+  ".html": "html",
+  ".htm": "html",
+  ".css": "css",
+  ".scss": "scss",
+  ".less": "less",
+  ".js": "babel",
+  ".jsx": "babel",
+  ".mjs": "babel",
+  ".cjs": "babel",
+  ".ts": "typescript",
+  ".tsx": "typescript",
+  ".json": "json",
+  ".md": "markdown",
+  ".mdx": "mdx",
+  ".yaml": "yaml",
+  ".yml": "yaml",
+  ".graphql": "graphql",
+};
+
+async function formatCode(filePath: string, content: string): Promise<string> {
+  const ext = path.extname(filePath).toLowerCase();
+  const parser = PRETTIER_PARSERS[ext];
+  if (!parser) return content;
+  try {
+    return await prettier.format(content, {
+      parser,
+      printWidth: 100,
+      tabWidth: 2,
+      useTabs: false,
+      semi: true,
+      singleQuote: false,
+      trailingComma: "es5",
+      bracketSpacing: true,
+      htmlWhitespaceSensitivity: "css",
+      endOfLine: "lf",
+    });
+  } catch {
+    return content;
+  }
+}
 
 export function getWorkspacePath(sessionId: string): string {
   const safeName = sessionId.replace(/[^a-zA-Z0-9-]/g, "");
@@ -69,8 +112,9 @@ export async function writeFile(
     throw new Error("Path traversal not allowed");
   }
 
+  const formatted = await formatCode(filePath, content);
   await fs.mkdir(path.dirname(target), { recursive: true });
-  await fs.writeFile(target, content, "utf-8");
+  await fs.writeFile(target, formatted, "utf-8");
 }
 
 export async function deleteFile(
