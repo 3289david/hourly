@@ -74,12 +74,16 @@ export async function validatePolarLicense(
   };
 
   if (licenseData.status !== "granted" && licenseData.status !== "active") {
-    throw new Error("This license key has already been used or is inactive");
+    throw new Error(
+      `This license key is ${licenseData.status === "revoked" ? "revoked" : "inactive"}. Each key can only be used once — purchase a new key at hourly.dev/pricing.`
+    );
   }
 
-  // Reject if usage is at or over limit
+  // Reject if usage is at or over limit (key already activated)
   if (licenseData.limit_usage !== null && licenseData.usage >= licenseData.limit_usage) {
-    throw new Error("This license key has already been activated");
+    throw new Error(
+      "This license key has already been activated. Each key can only be used once — purchase a new key at hourly.dev/pricing to add more time."
+    );
   }
 
   // Step 2: find the benefit grant → order → product_id
